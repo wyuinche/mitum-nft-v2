@@ -274,7 +274,7 @@ func (cpr Copyrighter) IsValid([]byte) error {
 }
 
 var (
-	NFTType   = hint.Type("mitum-nft-post-info")
+	NFTType   = hint.Type("mitum-nft-nft")
 	NFTHint   = hint.NewHint(NFTType, "v0.0.1")
 	NFTHinter = NFT{BaseHinter: hint.NewBaseHinter(NFTHint)}
 )
