@@ -133,6 +133,29 @@ func (pct PostCloseTime) IsValid([]byte) error {
 }
 
 var (
+	SellPostOption    = PostOption("sell")
+	AuctionPostOption = PostOption("auction")
+)
+
+type PostOption string
+
+func (po PostOption) Bytes() []byte {
+	return []byte(po)
+}
+
+func (po PostOption) String() string {
+	return string(po)
+}
+
+func (po PostOption) IsValid([]byte) error {
+	if !(po == SellPostOption || po == AuctionPostOption) {
+		return isvalid.InvalidError.Errorf("invalid post option, %s", po)
+	}
+
+	return nil
+}
+
+var (
 	PostInfoType   = hint.Type("mitum-nft-post-info")
 	PostInfoHint   = hint.NewHint(PostInfoType, "v0.0.1")
 	PostInfoHinter = PostInfo{BaseHinter: hint.NewBaseHinter(PostInfoHint)}
@@ -140,22 +163,35 @@ var (
 
 type PostInfo struct {
 	hint.BaseHinter
+	posting   bool
+	option    PostOption
 	broker    Symbol
 	closeTime PostCloseTime
 	price     currency.Amount
 }
 
-func NewPostInfo(broker Symbol, closeTime PostCloseTime, price currency.Amount) PostInfo {
+func NewPostInfo(posting bool, option PostOption, broker Symbol, closeTime PostCloseTime, price currency.Amount) PostInfo {
+	if posting {
+		return PostInfo{
+			posting:   true,
+			broker:    broker,
+			option:    option,
+			closeTime: closeTime,
+			price:     price,
+		}
+	}
+
 	return PostInfo{
-		BaseHinter: hint.NewBaseHinter(PostInfoHint),
-		broker:     broker,
-		closeTime:  closeTime,
-		price:      price,
+		posting:   false,
+		option:    option,
+		broker:    "",
+		closeTime: "",
+		price:     currency.NewAmount(currency.NewBig(0), ""),
 	}
 }
 
-func MustNewPostInfo(broker Symbol, closeTime PostCloseTime, price currency.Amount) PostInfo {
-	info := NewPostInfo(broker, closeTime, price)
+func MustNewPostInfo(posting bool, option PostOption, broker Symbol, closeTime PostCloseTime, price currency.Amount) PostInfo {
+	info := NewPostInfo(posting, option, broker, closeTime, price)
 
 	if err := info.IsValid(nil); err != nil {
 		panic(err)
@@ -165,17 +201,31 @@ func MustNewPostInfo(broker Symbol, closeTime PostCloseTime, price currency.Amou
 }
 
 func (info PostInfo) Bytes() []byte {
-	return util.ConcatBytesSlice(
-		info.broker.Bytes(),
-		info.closeTime.Bytes(),
-		info.price.Bytes(),
-	)
+	if info.posting {
+		return util.ConcatBytesSlice(
+			[]byte{1},
+			info.option.Bytes(),
+			info.broker.Bytes(),
+			info.closeTime.Bytes(),
+			info.price.Bytes(),
+		)
+	}
+
+	return []byte{0}
 }
 
 func (info PostInfo) IsValid([]byte) error {
+	if err := info.BaseHinter.IsValid(nil); err != nil {
+		return isvalid.InvalidError.Errorf("invalid PostInfo: %w", err)
+	}
+
+	if !info.posting {
+		return nil
+	}
+
 	if err := isvalid.Check(
 		nil, false,
-		info.BaseHinter,
+		info.option,
 		info.broker,
 		info.closeTime,
 		info.price,
@@ -183,6 +233,10 @@ func (info PostInfo) IsValid([]byte) error {
 		return isvalid.InvalidError.Errorf("invalid PostInfo: %w", err)
 	}
 	return nil
+}
+
+func (info PostInfo) Option() PostOption {
+	return info.option
 }
 
 func (info PostInfo) Broker() Symbol {
@@ -259,14 +313,15 @@ func (cpr Copyrighter) String() string {
 }
 
 func (cpr Copyrighter) IsValid([]byte) error {
+	if err := cpr.BaseHinter.IsValid(nil); err != nil {
+		return isvalid.InvalidError.Errorf("invalid Copyrighter: %w", err)
+	}
+
 	if !cpr.set {
 		return nil
 	}
 
-	if err := isvalid.Check(nil, false,
-		cpr.BaseHinter,
-		cpr.address,
-	); err != nil {
+	if err := cpr.address.IsValid(nil); err != nil {
 		return isvalid.InvalidError.Errorf("invalid Copyrighter: %w", err)
 	}
 
@@ -274,7 +329,7 @@ func (cpr Copyrighter) IsValid([]byte) error {
 }
 
 var (
-	NFTType   = hint.Type("mitum-nft-nft")
+	NFTType   = hint.Type("mitum-nft-post-info")
 	NFTHint   = hint.NewHint(NFTType, "v0.0.1")
 	NFTHinter = NFT{BaseHinter: hint.NewBaseHinter(NFTHint)}
 )
