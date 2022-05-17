@@ -1,7 +1,6 @@
 package collection
 
 import (
-	"github.com/ProtoconNet/mitum-nft/nft"
 	"github.com/pkg/errors"
 	"github.com/spikeekips/mitum-currency/currency"
 	"github.com/spikeekips/mitum/base"
@@ -17,7 +16,7 @@ var (
 	AddPolicyFactHinter = AddPolicyFact{BaseHinter: hint.NewBaseHinter(AddPolicyFactHint)}
 	AddPolicyType       = hint.Type("mitum-nft-add-collection-policy-operation")
 	AddPolicyHint       = hint.NewHint(AddPolicyType, "v0.0.1")
-	AddPolicyHinter     = AddUserDefinedPolicy{BaseOperation: nft.OperationHinter(AddPolicyHint)}
+	AddPolicyHinter     = AddUserDefinedPolicy{BaseOperation: nft.operationHinter(AddPolicyHint)}
 )
 
 type AddPolicyFact struct {

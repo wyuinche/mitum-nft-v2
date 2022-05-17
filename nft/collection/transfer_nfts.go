@@ -16,7 +16,7 @@ var (
 	TransferNFTsFactHinter = TransferNFTsFact{BaseHinter: hint.NewBaseHinter(TransferNFTsFactHint)}
 	TransferNFTsType       = hint.Type("mitum-nft-transfer-nfts-operation")
 	TransferNFTsHint       = hint.NewHint(TransferNFTsType, "v0.0.1")
-	TransferNFTsHinter     = TransferNFTs{BaseOperation: nft.OperationHinter(TransferNFTsHint)}
+	TransferNFTsHinter     = TransferNFTs{BaseOperation: operationHinter(TransferNFTsHint)}
 )
 
 var MaxTransferNFTsItems uint = 10

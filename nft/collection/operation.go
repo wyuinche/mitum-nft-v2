@@ -1,4 +1,4 @@
-package nft
+package collection
 
 import (
 	"github.com/spikeekips/mitum-currency/currency"
@@ -6,6 +6,6 @@ import (
 	"github.com/spikeekips/mitum/util/hint"
 )
 
-func OperationHinter(ht hint.Hint) currency.BaseOperation {
+func operationHinter(ht hint.Hint) currency.BaseOperation {
 	return currency.BaseOperation{BaseOperation: operation.EmptyBaseOperation(ht)}
 }

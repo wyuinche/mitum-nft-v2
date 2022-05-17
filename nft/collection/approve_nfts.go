@@ -17,7 +17,7 @@ var (
 	ApproveNFTsFactHinter = ApproveNFTsFact{BaseHinter: hint.NewBaseHinter(ApproveNFTsFactHint)}
 	ApproveNFTsType       = hint.Type("mitum-nft-approve-nfts-operation")
 	ApproveNFTsHint       = hint.NewHint(ApproveNFTsType, "v0.0.1")
-	ApproveNFTsHinter     = ApproveNFTs{BaseOperation: nft.OperationHinter(ApproveNFTsHint)}
+	ApproveNFTsHinter     = ApproveNFTs{BaseOperation: operationHinter(ApproveNFTsHint)}
 )
 
 type ApproveNFTsFact struct {

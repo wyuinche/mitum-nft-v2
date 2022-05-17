@@ -1,7 +1,6 @@
 package collection
 
 import (
-	"github.com/ProtoconNet/mitum-nft/nft"
 	"github.com/pkg/errors"
 	"github.com/spikeekips/mitum-currency/currency"
 	"github.com/spikeekips/mitum/base"
@@ -17,7 +16,7 @@ var (
 	DelegateAccountFactHinter = DelegateAccountFact{BaseHinter: hint.NewBaseHinter(DelegateAccountFactHint)}
 	DelegateAccountType       = hint.Type("mitum-nft-delegate-account-operation")
 	DelegateAccountHint       = hint.NewHint(DelegateAccountType, "v0.0.1")
-	DelegateAccountHinter     = DelegateAccount{BaseOperation: nft.OperationHinter(DelegateAccountHint)}
+	DelegateAccountHinter     = DelegateAccount{BaseOperation: operationHinter(DelegateAccountHint)}
 )
 
 type DelegateAccountFact struct {

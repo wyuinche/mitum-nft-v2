@@ -55,7 +55,7 @@ var (
 	MintNFTFactHinter = MintNFTFact{BaseHinter: hint.NewBaseHinter(MintNFTFactHint)}
 	MintNFTType       = hint.Type("mitum-nft-mint-nft-operation")
 	MintNFTHint       = hint.NewHint(MintNFTType, "v0.0.1")
-	MintNFTHinter     = MintNFT{BaseOperation: nft.OperationHinter(MintNFTHint)}
+	MintNFTHinter     = MintNFT{BaseOperation: operationHinter(MintNFTHint)}
 )
 
 type MintNFTFact struct {
@@ -95,7 +95,7 @@ func (fact MintNFTFact) Bytes() []byte {
 		fact.token,
 		fact.sender.Bytes(),
 		fact.collection.Bytes(),
-		fact.nft.Bytes(),
+		fact.Bytes(),
 		fact.cid.Bytes(),
 	)
 }
