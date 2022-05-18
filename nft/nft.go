@@ -57,7 +57,7 @@ func (nid NFTID) IsValid([]byte) error {
 		nid.collection,
 		nid.idx,
 	); err != nil {
-		return isvalid.InvalidError.Errorf("invalid NFTID: %w", err)
+		return isvalid.InvalidError.Errorf("invalid nft id; %w", err)
 	}
 
 	return nil
@@ -170,7 +170,7 @@ func (cpr Copyrighter) String() string {
 
 func (cpr Copyrighter) IsValid([]byte) error {
 	if err := cpr.BaseHinter.IsValid(nil); err != nil {
-		return isvalid.InvalidError.Errorf("invalid Copyrighter: %w", err)
+		return isvalid.InvalidError.Errorf("invalid copyrightr; %w", err)
 	}
 
 	if !cpr.set {
@@ -178,7 +178,7 @@ func (cpr Copyrighter) IsValid([]byte) error {
 	}
 
 	if err := cpr.address.IsValid(nil); err != nil {
-		return isvalid.InvalidError.Errorf("invalid Copyrighter: %w", err)
+		return isvalid.InvalidError.Errorf("invalid address for copyrighter; %w", err)
 	}
 
 	return nil
@@ -243,7 +243,7 @@ func (nft NFT) IsValid([]byte) error {
 		nft.approved,
 		nft.copyrighter,
 	); err != nil {
-		return isvalid.InvalidError.Errorf("invalid NFT: %w", err)
+		return isvalid.InvalidError.Errorf("invalid nft; %w", err)
 	}
 	return nil
 }

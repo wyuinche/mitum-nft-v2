@@ -87,9 +87,9 @@ func (fact TransferFact) IsValid(b []byte) error {
 	}
 
 	if n := len(fact.items); n < 1 {
-		return isvalid.InvalidError.Errorf("empty items")
+		return isvalid.InvalidError.Errorf("empty items for TransferFact")
 	} else if n > int(MaxTransferItems) {
-		return isvalid.InvalidError.Errorf("items, %d over max, %d", n, MaxTransferItems)
+		return isvalid.InvalidError.Errorf("items over allowed; %d > %d", n, MaxTransferItems)
 	}
 
 	if err := isvalid.Check(nil, false, fact.sender); err != nil {
@@ -111,7 +111,7 @@ func (fact TransferFact) IsValid(b []byte) error {
 
 			nft := nfts[j].String()
 			if _, found := foundNFT[nft]; found {
-				return isvalid.InvalidError.Errorf("duplicated nft found, %s", nft)
+				return isvalid.InvalidError.Errorf("duplicated nft found; %s", nft)
 			}
 
 			foundNFT[nft] = true

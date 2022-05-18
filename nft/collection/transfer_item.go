@@ -45,10 +45,6 @@ func (it BaseTransferItem) Bytes() []byte {
 }
 
 func (it BaseTransferItem) IsValid([]byte) error {
-	if n := len(it.nfts); n == 0 {
-		return errors.Errorf("empty nfts")
-	}
-
 	if err := isvalid.Check(nil, false, it.BaseHinter, it.from, it.to, it.cid); err != nil {
 		return err
 	}
@@ -64,7 +60,7 @@ func (it BaseTransferItem) IsValid([]byte) error {
 		}
 		nft := it.nfts[i].String()
 		if _, found := foundNFT[nft]; found {
-			return errors.Errorf("duplicated nft found, %s", nft)
+			return errors.Errorf("duplicated nft found; %s", nft)
 		}
 		foundNFT[nft] = true
 	}

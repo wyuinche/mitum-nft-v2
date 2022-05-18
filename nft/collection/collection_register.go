@@ -1,7 +1,6 @@
 package collection
 
 import (
-	"github.com/pkg/errors"
 	"github.com/spikeekips/mitum-currency/currency"
 	"github.com/spikeekips/mitum/base"
 	"github.com/spikeekips/mitum/util"
@@ -71,7 +70,7 @@ func (fact CollectionRegisterFact) IsValid(b []byte) error {
 	}
 
 	if len(fact.token) < 1 {
-		return errors.Errorf("empty token for CollectionRegisterFact")
+		return isvalid.InvalidError.Errorf("empty token for CollectionRegisterFact")
 	}
 
 	if err := isvalid.Check(

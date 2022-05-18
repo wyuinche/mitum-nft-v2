@@ -1,9 +1,9 @@
 package nft
 
 import (
-	"github.com/pkg/errors"
 	"github.com/spikeekips/mitum-currency/currency"
 	"github.com/spikeekips/mitum/base"
+	"github.com/spikeekips/mitum/util"
 	"github.com/spikeekips/mitum/util/encoder"
 )
 
@@ -47,7 +47,7 @@ func (nft *NFT) unpack(
 	if hinter, err := enc.Decode(bId); err != nil {
 		return err
 	} else if id, ok := hinter.(NFTID); !ok {
-		return errors.Errorf("not Copyrighter: %T", hinter)
+		return util.WrongTypeError.Errorf("not Copyrighter; %T", hinter)
 	} else {
 		nft.id = id
 	}
@@ -70,7 +70,7 @@ func (nft *NFT) unpack(
 	if hinter, err := enc.Decode(bCopyrighter); err != nil {
 		return err
 	} else if copyrighter, ok := hinter.(Copyrighter); !ok {
-		return errors.Errorf("not Copyrighter: %T", hinter)
+		return util.WrongTypeError.Errorf("not Copyrighter; %T", hinter)
 	} else {
 		nft.copyrighter = copyrighter
 	}

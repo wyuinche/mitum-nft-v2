@@ -1,10 +1,9 @@
 package collection
 
 import (
-	"github.com/pkg/errors"
-
 	"github.com/spikeekips/mitum-currency/currency"
 	"github.com/spikeekips/mitum/base"
+	"github.com/spikeekips/mitum/util"
 	"github.com/spikeekips/mitum/util/encoder"
 	"github.com/spikeekips/mitum/util/valuehash"
 )
@@ -32,7 +31,7 @@ func (fact *CollectionRegisterFact) unpack(
 	if hinter, err := enc.Decode(bPolicy); err != nil {
 		return err
 	} else if i, ok := hinter.(CollectionPolicy); !ok {
-		return errors.Errorf("not CollectionPolicy: %T", hinter)
+		return util.WrongTypeError.Errorf("not CollectionPolicy; %T", hinter)
 	} else {
 		policy = i
 	}

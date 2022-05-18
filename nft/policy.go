@@ -26,9 +26,9 @@ func (s Symbol) String() string {
 func (s Symbol) IsValid([]byte) error {
 	if l := len(s); l < MinLengthSymbol || l > MaxLengthSymbol {
 		return isvalid.InvalidError.Errorf(
-			"invalid length of symbol, %d <= %d <= %d", MinLengthSymbol, l, MaxLengthSymbol)
+			"invalid length of symbol; %d <= %d <= %d", MinLengthSymbol, l, MaxLengthSymbol)
 	} else if !ReValidSymbol.Match([]byte(s)) {
-		return isvalid.InvalidError.Errorf("wrong symbol, %q", s)
+		return isvalid.InvalidError.Errorf("wrong symbol; %q", s)
 	}
 
 	return nil
@@ -47,7 +47,7 @@ func (pp PaymentParameter) Uint() uint {
 func (pp PaymentParameter) IsValid([]byte) error {
 	if uint(pp) > 100 {
 		return isvalid.InvalidError.Errorf(
-			"invalid range of symbol, %d <= %d <= %d", 0, pp, 100)
+			"invalid range of symbol; %d <= %d <= %d", 0, pp, 100)
 	}
 
 	return nil

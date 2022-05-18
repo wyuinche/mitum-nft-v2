@@ -28,7 +28,7 @@ func (fact *TransferFact) unpack(
 	for i := range hits {
 		j, ok := hits[i].(TransferItem)
 		if !ok {
-			return util.WrongTypeError.Errorf("expected TransferItem, not %T", hits[i])
+			return util.WrongTypeError.Errorf("not TransferItem; %T", hits[i])
 		}
 
 		its[i] = j

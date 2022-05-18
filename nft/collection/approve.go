@@ -2,7 +2,6 @@ package collection
 
 import (
 	"github.com/ProtoconNet/mitum-nft/nft"
-	"github.com/pkg/errors"
 	"github.com/spikeekips/mitum-currency/currency"
 	"github.com/spikeekips/mitum/base"
 	"github.com/spikeekips/mitum/util"
@@ -78,18 +77,14 @@ func (fact ApproveFact) IsValid(b []byte) error {
 
 	if len(fact.token) < 1 {
 		return isvalid.InvalidError.Errorf("empty token for ApproveFact")
-	} else if n := len(fact.nfts); n < 1 {
-		return isvalid.InvalidError.Errorf("empty nfts")
+	} else if len(fact.nfts) < 1 {
+		return isvalid.InvalidError.Errorf("empty nfts for ApproveFact")
 	}
 
 	if err := isvalid.Check(
 		nil, false, fact.h,
 		fact.sender, fact.approved, fact.cid); err != nil {
 		return err
-	}
-
-	if len(fact.nfts) < 1 {
-		return isvalid.InvalidError.Errorf("empty nfts for ApproveFact")
 	}
 
 	foundNFT := map[string]bool{}
@@ -99,7 +94,7 @@ func (fact ApproveFact) IsValid(b []byte) error {
 		}
 		nft := fact.nfts[i].String()
 		if _, found := foundNFT[nft]; found {
-			return errors.Errorf("duplicated nft found, %s", nft)
+			return isvalid.InvalidError.Errorf("duplicated nft found; %s", nft)
 		}
 		foundNFT[nft] = true
 	}

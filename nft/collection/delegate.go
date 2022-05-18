@@ -101,7 +101,7 @@ func (fact DelegateFact) IsValid(b []byte) error {
 
 		agent := fact.agents[i].String()
 		if _, found := foundAgent[agent]; found {
-			return isvalid.InvalidError.Errorf("duplicate agent found, %s", agent)
+			return isvalid.InvalidError.Errorf("duplicate agent found; %s", agent)
 		}
 
 		foundAgent[agent] = true

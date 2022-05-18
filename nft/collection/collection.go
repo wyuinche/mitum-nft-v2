@@ -29,9 +29,9 @@ func (cn CollectionName) String() string {
 func (cn CollectionName) IsValid([]byte) error {
 	if l := len(cn); l < MinLengthCollectionName || l > MaxLengthCollectionName {
 		return isvalid.InvalidError.Errorf(
-			"invalid length of collection name, %d <= %d <= %d", MinLengthCollectionName, l, MaxLengthCollectionName)
+			"invalid length of collection name; %d <= %d <= %d", MinLengthCollectionName, l, MaxLengthCollectionName)
 	} else if !nft.ReValidSymbol.Match([]byte(cn)) {
-		return isvalid.InvalidError.Errorf("wrong collection name, %q", cn)
+		return isvalid.InvalidError.Errorf("wrong collection name; %q", cn)
 	}
 
 	return nil

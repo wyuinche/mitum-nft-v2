@@ -34,7 +34,7 @@ func (it *BaseTransferItem) unpack(
 	for i := range hNFTs {
 		j, ok := hNFTs[i].(nft.NFTID)
 		if !ok {
-			return util.WrongTypeError.Errorf("expected NFTID, not %T", hNFTs[i])
+			return util.WrongTypeError.Errorf("not NFTID; %T", hNFTs[i])
 		}
 
 		nfts[i] = j

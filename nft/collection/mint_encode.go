@@ -22,7 +22,7 @@ func (form *MintForm) unpack(
 	if hinter, err := enc.Decode(bCopyrighter); err != nil {
 		return err
 	} else if copyrighter, ok := hinter.(nft.Copyrighter); !ok {
-		return errors.Errorf("not Copyrighter: %T", hinter)
+		return errors.Errorf("not Copyrighter; %T", hinter)
 	} else {
 		form.copyrighter = copyrighter
 	}
@@ -47,7 +47,7 @@ func (fact *MintFact) unpack(
 	if hinter, err := enc.Decode(bForm); err != nil {
 		return err
 	} else if form, ok := hinter.(MintForm); !ok {
-		return errors.Errorf("not mint form: %T", hinter)
+		return errors.Errorf("not MintForm; %T", hinter)
 	} else {
 		fact.form = form
 	}
