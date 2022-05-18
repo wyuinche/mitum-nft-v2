@@ -2,7 +2,6 @@ package nft
 
 import (
 	"fmt"
-	"regexp"
 
 	"github.com/spikeekips/mitum-currency/currency"
 	"github.com/spikeekips/mitum/base"
@@ -112,149 +111,6 @@ func (hs NFTHash) IsValid([]byte) error {
 	return nil
 }
 
-type PostCloseTime string
-
-var RevalidPostCloseTime = regexp.MustCompile(`^\d{4}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[1-2]\d|3[0-1])T(?:[0-1]\d|2[0-3]):[0-5]\d:[0-5]\dZ$`)
-
-func (pct PostCloseTime) Bytes() []byte {
-	return []byte(pct)
-}
-
-func (pct PostCloseTime) String() string {
-	return string(pct)
-}
-
-func (pct PostCloseTime) IsValid([]byte) error {
-	if !RevalidPostCloseTime.Match([]byte(pct)) {
-		return isvalid.InvalidError.Errorf("wrong post close time, %q", pct)
-	}
-
-	return nil
-}
-
-var (
-	SellPostOption    = PostOption("sell")
-	AuctionPostOption = PostOption("auction")
-)
-
-type PostOption string
-
-func (po PostOption) Bytes() []byte {
-	return []byte(po)
-}
-
-func (po PostOption) String() string {
-	return string(po)
-}
-
-func (po PostOption) IsValid([]byte) error {
-	if !(po == SellPostOption || po == AuctionPostOption) {
-		return isvalid.InvalidError.Errorf("invalid post option, %s", po)
-	}
-
-	return nil
-}
-
-var (
-	PostInfoType   = hint.Type("mitum-nft-post-info")
-	PostInfoHint   = hint.NewHint(PostInfoType, "v0.0.1")
-	PostInfoHinter = PostInfo{BaseHinter: hint.NewBaseHinter(PostInfoHint)}
-)
-
-type PostInfo struct {
-	hint.BaseHinter
-	posting   bool
-	option    PostOption
-	broker    Symbol
-	closeTime PostCloseTime
-	price     currency.Amount
-}
-
-func NewPostInfo(posting bool, option PostOption, broker Symbol, closeTime PostCloseTime, price currency.Amount) PostInfo {
-	if posting {
-		return PostInfo{
-			posting:   true,
-			broker:    broker,
-			option:    option,
-			closeTime: closeTime,
-			price:     price,
-		}
-	}
-
-	return PostInfo{
-		posting:   false,
-		option:    option,
-		broker:    "",
-		closeTime: "",
-		price:     currency.NewAmount(currency.NewBig(0), ""),
-	}
-}
-
-func MustNewPostInfo(posting bool, option PostOption, broker Symbol, closeTime PostCloseTime, price currency.Amount) PostInfo {
-	info := NewPostInfo(posting, option, broker, closeTime, price)
-
-	if err := info.IsValid(nil); err != nil {
-		panic(err)
-	}
-
-	return info
-}
-
-func (info PostInfo) Bytes() []byte {
-	if info.posting {
-		return util.ConcatBytesSlice(
-			[]byte{1},
-			info.option.Bytes(),
-			info.broker.Bytes(),
-			info.closeTime.Bytes(),
-			info.price.Bytes(),
-		)
-	}
-
-	return []byte{0}
-}
-
-func (info PostInfo) IsValid([]byte) error {
-	if err := info.BaseHinter.IsValid(nil); err != nil {
-		return isvalid.InvalidError.Errorf("invalid PostInfo: %w", err)
-	}
-
-	if !info.posting {
-		return nil
-	}
-
-	if err := isvalid.Check(
-		nil, false,
-		info.option,
-		info.broker,
-		info.closeTime,
-		info.price,
-	); err != nil {
-		return isvalid.InvalidError.Errorf("invalid PostInfo: %w", err)
-	}
-	return nil
-}
-
-func (info PostInfo) Option() PostOption {
-	return info.option
-}
-
-func (info PostInfo) Broker() Symbol {
-	return info.broker
-}
-
-func (info PostInfo) Price() currency.Amount {
-	return info.price
-}
-
-func (info PostInfo) CloseTime() PostCloseTime {
-	return info.closeTime
-}
-
-func (info PostInfo) Rebuild() PostInfo {
-	return info
-}
-
 var (
 	CopyrighterType   = hint.Type("mitum-nft-copyrighter")
 	CopyrighterHint   = hint.NewHint(CopyrighterType, "v0.0.1")
@@ -342,10 +198,9 @@ type NFT struct {
 	uri         NFTUri
 	approved    base.Address
 	copyrighter Copyrighter
-	post        PostInfo
 }
 
-func NewNFT(id NFTID, owner base.Address, hash NFTHash, uri NFTUri, approved base.Address, copyrighter Copyrighter, post PostInfo) NFT {
+func NewNFT(id NFTID, owner base.Address, hash NFTHash, uri NFTUri, approved base.Address, copyrighter Copyrighter) NFT {
 	return NFT{
 		BaseHinter:  hint.NewBaseHinter(NFTHint),
 		id:          id,
@@ -354,12 +209,11 @@ func NewNFT(id NFTID, owner base.Address, hash NFTHash, uri NFTUri, approved bas
 		uri:         uri,
 		approved:    approved,
 		copyrighter: copyrighter,
-		post:        post,
 	}
 }
 
-func MustNewNFT(id NFTID, owner base.Address, hash NFTHash, uri NFTUri, approved base.Address, copyrighter Copyrighter, post PostInfo) NFT {
-	nft := NewNFT(id, owner, hash, uri, approved, copyrighter, post)
+func MustNewNFT(id NFTID, owner base.Address, hash NFTHash, uri NFTUri, approved base.Address, copyrighter Copyrighter) NFT {
+	nft := NewNFT(id, owner, hash, uri, approved, copyrighter)
 
 	if err := nft.IsValid(nil); err != nil {
 		panic(err)
@@ -376,7 +230,6 @@ func (nft NFT) Bytes() []byte {
 		nft.uri.Bytes(),
 		nft.approved.Bytes(),
 		nft.copyrighter.Bytes(),
-		nft.post.Bytes(),
 	)
 }
 
@@ -389,7 +242,6 @@ func (nft NFT) IsValid([]byte) error {
 		nft.uri,
 		nft.approved,
 		nft.copyrighter,
-		nft.post,
 	); err != nil {
 		return isvalid.InvalidError.Errorf("invalid NFT: %w", err)
 	}

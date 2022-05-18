@@ -11,7 +11,7 @@ import (
 	"github.com/spikeekips/mitum/util/isvalid"
 )
 
-type BaseTransferNFTsItem struct {
+type BaseTransferItem struct {
 	hint.BaseHinter
 	from base.Address
 	to   base.Address
@@ -19,8 +19,8 @@ type BaseTransferNFTsItem struct {
 	cid  currency.CurrencyID
 }
 
-func NewBaseTransferNFTsItem(ht hint.Hint, from base.Address, to base.Address, nfts []nft.NFTID, cid currency.CurrencyID) BaseTransferNFTsItem {
-	return BaseTransferNFTsItem{
+func NewBaseTransferItem(ht hint.Hint, from base.Address, to base.Address, nfts []nft.NFTID, cid currency.CurrencyID) BaseTransferItem {
+	return BaseTransferItem{
 		BaseHinter: hint.NewBaseHinter(ht),
 		from:       from,
 		to:         to,
@@ -29,7 +29,7 @@ func NewBaseTransferNFTsItem(ht hint.Hint, from base.Address, to base.Address, n
 	}
 }
 
-func (it BaseTransferNFTsItem) Bytes() []byte {
+func (it BaseTransferItem) Bytes() []byte {
 	ns := make([][]byte, len(it.nfts))
 
 	for i := range it.nfts {
@@ -44,7 +44,7 @@ func (it BaseTransferNFTsItem) Bytes() []byte {
 	)
 }
 
-func (it BaseTransferNFTsItem) IsValid([]byte) error {
+func (it BaseTransferItem) IsValid([]byte) error {
 	if n := len(it.nfts); n == 0 {
 		return errors.Errorf("empty nfts")
 	}
@@ -68,30 +68,30 @@ func (it BaseTransferNFTsItem) IsValid([]byte) error {
 	return nil
 }
 
-func (it BaseTransferNFTsItem) From() base.Address {
+func (it BaseTransferItem) From() base.Address {
 	return it.from
 }
 
-func (it BaseTransferNFTsItem) To() base.Address {
+func (it BaseTransferItem) To() base.Address {
 	return it.to
 }
 
-func (it BaseTransferNFTsItem) Addresses() []base.Address {
+func (it BaseTransferItem) Addresses() []base.Address {
 	as := make([]base.Address, 2)
 	as[0] = it.From()
 	as[1] = it.To()
 	return as
 }
 
-func (it BaseTransferNFTsItem) NFTs() []nft.NFTID {
+func (it BaseTransferItem) NFTs() []nft.NFTID {
 	return it.nfts
 }
 
-func (it BaseTransferNFTsItem) Currency() currency.CurrencyID {
+func (it BaseTransferItem) Currency() currency.CurrencyID {
 	return it.cid
 }
 
-func (it BaseTransferNFTsItem) Rebuild() TransferNFTsItem {
+func (it BaseTransferItem) Rebuild() TransferItem {
 	nfts := make([]nft.NFTID, len(it.nfts))
 	for i := range it.nfts {
 		nfts[i] = it.nfts[i]

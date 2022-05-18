@@ -11,21 +11,21 @@ import (
 )
 
 var (
-	TransferNFTsFactType   = hint.Type("mitum-nft-tranfer-nfts-operation-fact")
-	TransferNFTsFactHint   = hint.NewHint(TransferNFTsFactType, "v0.0.1")
-	TransferNFTsFactHinter = TransferNFTsFact{BaseHinter: hint.NewBaseHinter(TransferNFTsFactHint)}
-	TransferNFTsType       = hint.Type("mitum-nft-transfer-nfts-operation")
-	TransferNFTsHint       = hint.NewHint(TransferNFTsType, "v0.0.1")
-	TransferNFTsHinter     = TransferNFTs{BaseOperation: operationHinter(TransferNFTsHint)}
+	TransferFactType   = hint.Type("mitum-nft-tranfer-operation-fact")
+	TransferFactHint   = hint.NewHint(TransferFactType, "v0.0.1")
+	TransferFactHinter = TransferFact{BaseHinter: hint.NewBaseHinter(TransferFactHint)}
+	TransferType       = hint.Type("mitum-nft-transfer-operation")
+	TransferHint       = hint.NewHint(TransferType, "v0.0.1")
+	TransferHinter     = Transfer{BaseOperation: operationHinter(TransferHint)}
 )
 
-var MaxTransferNFTsItems uint = 10
+var MaxTransferItems uint = 10
 
 type NFTsItem interface {
 	NFTs() []nft.NFTID
 }
 
-type TransferNFTsItem interface {
+type TransferItem interface {
 	hint.Hinter
 	isvalid.IsValider
 	NFTsItem
@@ -33,20 +33,20 @@ type TransferNFTsItem interface {
 	From() base.Address
 	To() base.Address
 	Addresses() []base.Address
-	Rebuild() TransferNFTsItem
+	Rebuild() TransferItem
 }
 
-type TransferNFTsFact struct {
+type TransferFact struct {
 	hint.BaseHinter
 	h      valuehash.Hash
 	token  []byte
 	sender base.Address
-	items  []TransferNFTsItem
+	items  []TransferItem
 }
 
-func NewTransferNFTsFact(token []byte, sender base.Address, items []TransferNFTsItem) TransferNFTsFact {
-	fact := TransferNFTsFact{
-		BaseHinter: hint.NewBaseHinter(TransferNFTsFactHint),
+func NewTransferFact(token []byte, sender base.Address, items []TransferItem) TransferFact {
+	fact := TransferFact{
+		BaseHinter: hint.NewBaseHinter(TransferFactHint),
 		token:      token,
 		sender:     sender,
 		items:      items,
@@ -56,15 +56,15 @@ func NewTransferNFTsFact(token []byte, sender base.Address, items []TransferNFTs
 	return fact
 }
 
-func (fact TransferNFTsFact) Hash() valuehash.Hash {
+func (fact TransferFact) Hash() valuehash.Hash {
 	return fact.h
 }
 
-func (fact TransferNFTsFact) GenerateHash() valuehash.Hash {
+func (fact TransferFact) GenerateHash() valuehash.Hash {
 	return valuehash.NewSHA256(fact.Bytes())
 }
 
-func (fact TransferNFTsFact) Bytes() []byte {
+func (fact TransferFact) Bytes() []byte {
 	is := make([][]byte, len(fact.items))
 	for i := range fact.items {
 		is[i] = fact.items[i].Bytes()
@@ -77,7 +77,7 @@ func (fact TransferNFTsFact) Bytes() []byte {
 	)
 }
 
-func (fact TransferNFTsFact) IsValid(b []byte) error {
+func (fact TransferFact) IsValid(b []byte) error {
 	if err := fact.BaseHinter.IsValid(nil); err != nil {
 		return err
 	}
@@ -88,8 +88,8 @@ func (fact TransferNFTsFact) IsValid(b []byte) error {
 
 	if n := len(fact.items); n < 1 {
 		return isvalid.InvalidError.Errorf("empty items")
-	} else if n > int(MaxTransferNFTsItems) {
-		return isvalid.InvalidError.Errorf("items, %d over max, %d", n, MaxTransferNFTsItems)
+	} else if n > int(MaxTransferItems) {
+		return isvalid.InvalidError.Errorf("items, %d over max, %d", n, MaxTransferItems)
 	}
 
 	if err := isvalid.Check(nil, false, fact.sender); err != nil {
@@ -121,19 +121,19 @@ func (fact TransferNFTsFact) IsValid(b []byte) error {
 	return nil
 }
 
-func (fact TransferNFTsFact) Token() []byte {
+func (fact TransferFact) Token() []byte {
 	return fact.token
 }
 
-func (fact TransferNFTsFact) Sender() base.Address {
+func (fact TransferFact) Sender() base.Address {
 	return fact.sender
 }
 
-func (fact TransferNFTsFact) Items() []TransferNFTsItem {
+func (fact TransferFact) Items() []TransferItem {
 	return fact.items
 }
 
-func (fact TransferNFTsFact) Addresses() ([]base.Address, error) {
+func (fact TransferFact) Addresses() ([]base.Address, error) {
 	as := make([]base.Address, len(fact.items)*2+1)
 
 	for i := range fact.items {
@@ -145,8 +145,8 @@ func (fact TransferNFTsFact) Addresses() ([]base.Address, error) {
 	return as, nil
 }
 
-func (fact TransferNFTsFact) Rebuild() TransferNFTsFact {
-	items := make([]TransferNFTsItem, len(fact.items))
+func (fact TransferFact) Rebuild() TransferFact {
+	items := make([]TransferItem, len(fact.items))
 	for i := range fact.items {
 		it := fact.items[i]
 		items[i] = it.Rebuild()
@@ -158,15 +158,15 @@ func (fact TransferNFTsFact) Rebuild() TransferNFTsFact {
 	return fact
 }
 
-type TransferNFTs struct {
+type Transfer struct {
 	currency.BaseOperation
 }
 
-func NewTransferNFTs(fact TransferNFTsFact, fs []base.FactSign, memo string) (TransferNFTs, error) {
-	bo, err := currency.NewBaseOperationFromFact(TransferNFTsHint, fact, fs, memo)
+func NewTransfer(fact TransferFact, fs []base.FactSign, memo string) (Transfer, error) {
+	bo, err := currency.NewBaseOperationFromFact(TransferHint, fact, fs, memo)
 	if err != nil {
-		return TransferNFTs{}, err
+		return Transfer{}, err
 	}
 
-	return TransferNFTs{BaseOperation: bo}, nil
+	return Transfer{BaseOperation: bo}, nil
 }

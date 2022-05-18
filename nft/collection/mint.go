@@ -12,19 +12,19 @@ import (
 )
 
 var (
-	NFTInfoType   = hint.Type("mitum-nft-nft-info")
-	NFTInfoHint   = hint.NewHint(NFTInfoType, "v0.0.1")
-	NFTInfoHinter = NFTInfo{BaseHinter: hint.NewBaseHinter(NFTInfoHint)}
+	MintFormType   = hint.Type("mitum-nft-mint-form")
+	MintFormHint   = hint.NewHint(MintFormType, "v0.0.1")
+	MintFormHinter = MintForm{BaseHinter: hint.NewBaseHinter(MintFormHint)}
 )
 
-type NFTInfo struct {
+type MintForm struct {
 	hint.BaseHinter
 	hash        nft.NFTHash
 	uri         nft.NFTUri
 	copyrighter nft.Copyrighter
 }
 
-func (info NFTInfo) Bytes() []byte {
+func (info MintForm) Bytes() []byte {
 	return util.ConcatBytesSlice(
 		info.hash.Bytes(),
 		info.uri.Bytes(),
@@ -32,7 +32,7 @@ func (info NFTInfo) Bytes() []byte {
 	)
 }
 
-func (info NFTInfo) IsValid([]byte) error {
+func (info MintForm) IsValid([]byte) error {
 	if err := info.BaseHinter.IsValid(nil); err != nil {
 		return err
 	}
@@ -50,31 +50,31 @@ func (info NFTInfo) IsValid([]byte) error {
 }
 
 var (
-	MintNFTFactType   = hint.Type("mitum-nft-mint-nft-operation-fact")
-	MintNFTFactHint   = hint.NewHint(MintNFTFactType, "v0.0.1")
-	MintNFTFactHinter = MintNFTFact{BaseHinter: hint.NewBaseHinter(MintNFTFactHint)}
-	MintNFTType       = hint.Type("mitum-nft-mint-nft-operation")
-	MintNFTHint       = hint.NewHint(MintNFTType, "v0.0.1")
-	MintNFTHinter     = MintNFT{BaseOperation: operationHinter(MintNFTHint)}
+	MintFactType   = hint.Type("mitum-nft-mint-operation-fact")
+	MintFactHint   = hint.NewHint(MintFactType, "v0.0.1")
+	MintFactHinter = MintFact{BaseHinter: hint.NewBaseHinter(MintFactHint)}
+	MintType       = hint.Type("mitum-nft-mint-operation")
+	MintHint       = hint.NewHint(MintType, "v0.0.1")
+	MintHinter     = Mint{BaseOperation: operationHinter(MintHint)}
 )
 
-type MintNFTFact struct {
+type MintFact struct {
 	hint.BaseHinter
 	h          valuehash.Hash
 	token      []byte
 	sender     base.Address
 	collection nft.Symbol
-	nft        NFTInfo
+	form       MintForm
 	cid        currency.CurrencyID
 }
 
-func NewMintNFTFact(token []byte, sender base.Address, collection nft.Symbol, nft NFTInfo, cid currency.CurrencyID) MintNFTFact {
-	fact := MintNFTFact{
-		BaseHinter: hint.NewBaseHinter(MintNFTFactHint),
+func NewMintFact(token []byte, sender base.Address, collection nft.Symbol, form MintForm, cid currency.CurrencyID) MintFact {
+	fact := MintFact{
+		BaseHinter: hint.NewBaseHinter(MintFactHint),
 		token:      token,
 		sender:     sender,
 		collection: collection,
-		nft:        nft,
+		form:       form,
 		cid:        cid,
 	}
 	fact.h = fact.GenerateHash()
@@ -82,25 +82,25 @@ func NewMintNFTFact(token []byte, sender base.Address, collection nft.Symbol, nf
 	return fact
 }
 
-func (fact MintNFTFact) Hash() valuehash.Hash {
+func (fact MintFact) Hash() valuehash.Hash {
 	return fact.h
 }
 
-func (fact MintNFTFact) GenerateHash() valuehash.Hash {
+func (fact MintFact) GenerateHash() valuehash.Hash {
 	return valuehash.NewSHA256(fact.h.Bytes())
 }
 
-func (fact MintNFTFact) Bytes() []byte {
+func (fact MintFact) Bytes() []byte {
 	return util.ConcatBytesSlice(
 		fact.token,
 		fact.sender.Bytes(),
 		fact.collection.Bytes(),
-		fact.Bytes(),
+		fact.form.Bytes(),
 		fact.cid.Bytes(),
 	)
 }
 
-func (fact MintNFTFact) IsValid(b []byte) error {
+func (fact MintFact) IsValid(b []byte) error {
 	if err := fact.BaseHinter.IsValid(nil); err != nil {
 		return err
 	}
@@ -110,7 +110,7 @@ func (fact MintNFTFact) IsValid(b []byte) error {
 	}
 
 	if len(fact.token) < 1 {
-		return errors.Errorf("empty token for MintNFTFact")
+		return errors.Errorf("empty token for MintFact")
 	}
 
 	if err := isvalid.Check(
@@ -118,7 +118,7 @@ func (fact MintNFTFact) IsValid(b []byte) error {
 		fact.h,
 		fact.sender,
 		fact.collection,
-		fact.nft,
+		fact.form,
 		fact.cid); err != nil {
 		return err
 	}
@@ -130,47 +130,47 @@ func (fact MintNFTFact) IsValid(b []byte) error {
 	return nil
 }
 
-func (fact MintNFTFact) Token() []byte {
+func (fact MintFact) Token() []byte {
 	return fact.token
 }
 
-func (fact MintNFTFact) Sender() base.Address {
+func (fact MintFact) Sender() base.Address {
 	return fact.sender
 }
 
-func (fact MintNFTFact) Collection() nft.Symbol {
+func (fact MintFact) Collection() nft.Symbol {
 	return fact.collection
 }
 
-func (fact MintNFTFact) NFT() NFTInfo {
-	return fact.nft
+func (fact MintFact) Form() MintForm {
+	return fact.form
 }
 
-func (fact MintNFTFact) Addresses() ([]base.Address, error) {
+func (fact MintFact) Addresses() ([]base.Address, error) {
 	as := make([]base.Address, 1)
 	as[0] = fact.Sender()
 
 	return as, nil
 }
 
-func (fact MintNFTFact) Currency() currency.CurrencyID {
+func (fact MintFact) Currency() currency.CurrencyID {
 	return fact.cid
 }
 
-func (fact MintNFTFact) Rebuild() MintNFTFact {
+func (fact MintFact) Rebuild() MintFact {
 	fact.h = fact.GenerateHash()
 
 	return fact
 }
 
-type MintNFT struct {
+type Mint struct {
 	currency.BaseOperation
 }
 
-func NewMintNFT(fact MintNFTFact, fs []base.FactSign, memo string) (MintNFT, error) {
-	bo, err := currency.NewBaseOperationFromFact(MintNFTHint, fact, fs, memo)
+func NewMint(fact MintFact, fs []base.FactSign, memo string) (Mint, error) {
+	bo, err := currency.NewBaseOperationFromFact(MintHint, fact, fs, memo)
 	if err != nil {
-		return MintNFT{}, err
+		return Mint{}, err
 	}
-	return MintNFT{BaseOperation: bo}, nil
+	return Mint{BaseOperation: bo}, nil
 }

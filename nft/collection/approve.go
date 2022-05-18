@@ -12,15 +12,15 @@ import (
 )
 
 var (
-	ApproveNFTsFactType   = hint.Type("mitum-nft-approve-nfts-operation-fact")
-	ApproveNFTsFactHint   = hint.NewHint(ApproveNFTsFactType, "v0.0.1")
-	ApproveNFTsFactHinter = ApproveNFTsFact{BaseHinter: hint.NewBaseHinter(ApproveNFTsFactHint)}
-	ApproveNFTsType       = hint.Type("mitum-nft-approve-nfts-operation")
-	ApproveNFTsHint       = hint.NewHint(ApproveNFTsType, "v0.0.1")
-	ApproveNFTsHinter     = ApproveNFTs{BaseOperation: operationHinter(ApproveNFTsHint)}
+	ApproveFactType   = hint.Type("mitum-nft-approve-operation-fact")
+	ApproveFactHint   = hint.NewHint(ApproveFactType, "v0.0.1")
+	ApproveFactHinter = ApproveFact{BaseHinter: hint.NewBaseHinter(ApproveFactHint)}
+	ApproveType       = hint.Type("mitum-nft-approve-operation")
+	ApproveHint       = hint.NewHint(ApproveType, "v0.0.1")
+	ApproveHinter     = Approve{BaseOperation: operationHinter(ApproveHint)}
 )
 
-type ApproveNFTsFact struct {
+type ApproveFact struct {
 	hint.BaseHinter
 	h        valuehash.Hash
 	token    []byte
@@ -30,9 +30,9 @@ type ApproveNFTsFact struct {
 	cid      currency.CurrencyID
 }
 
-func NewApproveNFTsFact(token []byte, sender base.Address, approved base.Address, nfts []nft.NFTID, cid currency.CurrencyID) ApproveNFTsFact {
-	fact := ApproveNFTsFact{
-		BaseHinter: hint.NewBaseHinter(ApproveNFTsFactHint),
+func NewApproveFact(token []byte, sender base.Address, approved base.Address, nfts []nft.NFTID, cid currency.CurrencyID) ApproveFact {
+	fact := ApproveFact{
+		BaseHinter: hint.NewBaseHinter(ApproveFactHint),
 		token:      token,
 		sender:     sender,
 		approved:   approved,
@@ -44,15 +44,15 @@ func NewApproveNFTsFact(token []byte, sender base.Address, approved base.Address
 	return fact
 }
 
-func (fact ApproveNFTsFact) Hash() valuehash.Hash {
+func (fact ApproveFact) Hash() valuehash.Hash {
 	return fact.h
 }
 
-func (fact ApproveNFTsFact) GenerateHash() valuehash.Hash {
+func (fact ApproveFact) GenerateHash() valuehash.Hash {
 	return valuehash.NewSHA256(fact.Bytes())
 }
 
-func (fact ApproveNFTsFact) Bytes() []byte {
+func (fact ApproveFact) Bytes() []byte {
 	ns := make([][]byte, len(fact.nfts))
 	for i := range fact.nfts {
 		ns[i] = fact.nfts[i].Bytes()
@@ -67,7 +67,7 @@ func (fact ApproveNFTsFact) Bytes() []byte {
 	)
 }
 
-func (fact ApproveNFTsFact) IsValid(b []byte) error {
+func (fact ApproveFact) IsValid(b []byte) error {
 	if err := fact.BaseHinter.IsValid(nil); err != nil {
 		return err
 	}
@@ -77,7 +77,7 @@ func (fact ApproveNFTsFact) IsValid(b []byte) error {
 	}
 
 	if len(fact.token) < 1 {
-		return errors.Errorf("empty token for ApproveNFTsFact")
+		return errors.Errorf("empty token for ApproveFact")
 	} else if n := len(fact.nfts); n < 1 {
 		return errors.Errorf("empty nfts")
 	}
@@ -107,49 +107,49 @@ func (fact ApproveNFTsFact) IsValid(b []byte) error {
 	return nil
 }
 
-func (fact ApproveNFTsFact) Token() []byte {
+func (fact ApproveFact) Token() []byte {
 	return fact.token
 }
 
-func (fact ApproveNFTsFact) Sender() base.Address {
+func (fact ApproveFact) Sender() base.Address {
 	return fact.sender
 }
 
-func (fact ApproveNFTsFact) Approved() base.Address {
+func (fact ApproveFact) Approved() base.Address {
 	return fact.approved
 }
 
-func (fact ApproveNFTsFact) NFTs() []nft.NFTID {
+func (fact ApproveFact) NFTs() []nft.NFTID {
 	return fact.nfts
 }
 
-func (fact ApproveNFTsFact) Addresses() ([]base.Address, error) {
+func (fact ApproveFact) Addresses() ([]base.Address, error) {
 	as := make([]base.Address, 2)
 
-	as[0] = fact.Sender()
-	as[1] = fact.Approved()
+	as[0] = fact.sender
+	as[1] = fact.approved
 
 	return as, nil
 }
 
-func (fact ApproveNFTsFact) Currency() currency.CurrencyID {
+func (fact ApproveFact) Currency() currency.CurrencyID {
 	return fact.cid
 }
 
-func (fact ApproveNFTsFact) Rebuild() ApproveNFTsFact {
+func (fact ApproveFact) Rebuild() ApproveFact {
 	fact.h = fact.GenerateHash()
 
 	return fact
 }
 
-type ApproveNFTs struct {
+type Approve struct {
 	currency.BaseOperation
 }
 
-func NewApproveNFTs(fact ApproveNFTsFact, fs []base.FactSign, memo string) (ApproveNFTs, error) {
-	bo, err := currency.NewBaseOperationFromFact(ApproveNFTsHint, fact, fs, memo)
+func NewApprove(fact ApproveFact, fs []base.FactSign, memo string) (Approve, error) {
+	bo, err := currency.NewBaseOperationFromFact(ApproveHint, fact, fs, memo)
 	if err != nil {
-		return ApproveNFTs{}, err
+		return Approve{}, err
 	}
-	return ApproveNFTs{BaseOperation: bo}, nil
+	return Approve{BaseOperation: bo}, nil
 }

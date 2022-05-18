@@ -40,6 +40,10 @@ func (pp PaymentParameter) Bytes() []byte {
 	return util.UintToBytes(uint(pp))
 }
 
+func (pp PaymentParameter) Uint() uint {
+	return uint(pp)
+}
+
 func (pp PaymentParameter) IsValid([]byte) error {
 	if uint(pp) > 100 {
 		return isvalid.InvalidError.Errorf(
