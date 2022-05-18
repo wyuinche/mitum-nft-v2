@@ -87,7 +87,9 @@ func (fact DelegateFact) IsValid(b []byte) error {
 		return err
 	}
 
-	if n := len(fact.agents); n > MaxAgents {
+	if n := len(fact.agents); n < 1 {
+		return isvalid.InvalidError.Errorf("empty agents for DelegateFact")
+	} else if n > MaxAgents {
 		return isvalid.InvalidError.Errorf("agents over allowed; %d > %d", n, MaxAgents)
 	}
 

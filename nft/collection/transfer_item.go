@@ -53,6 +53,10 @@ func (it BaseTransferItem) IsValid([]byte) error {
 		return err
 	}
 
+	if len(it.nfts) < 1 {
+		return isvalid.InvalidError.Errorf("empty nfts for BaseTransferItem")
+	}
+
 	foundNFT := map[string]bool{}
 	for i := range it.nfts {
 		if err := it.nfts[i].IsValid(nil); err != nil {

@@ -77,15 +77,19 @@ func (fact ApproveFact) IsValid(b []byte) error {
 	}
 
 	if len(fact.token) < 1 {
-		return errors.Errorf("empty token for ApproveFact")
+		return isvalid.InvalidError.Errorf("empty token for ApproveFact")
 	} else if n := len(fact.nfts); n < 1 {
-		return errors.Errorf("empty nfts")
+		return isvalid.InvalidError.Errorf("empty nfts")
 	}
 
 	if err := isvalid.Check(
 		nil, false, fact.h,
 		fact.sender, fact.approved, fact.cid); err != nil {
 		return err
+	}
+
+	if len(fact.nfts) < 1 {
+		return isvalid.InvalidError.Errorf("empty nfts for ApproveFact")
 	}
 
 	foundNFT := map[string]bool{}
