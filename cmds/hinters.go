@@ -4,8 +4,8 @@ import (
 	"github.com/spikeekips/mitum/launch"
 	"github.com/spikeekips/mitum/util/hint"
 
-	"github.com/ProtoconNet/mitum-account-extension/digest"
 	"github.com/ProtoconNet/mitum-account-extension/extension"
+	"github.com/ProtoconNet/mitum-nft/digest"
 	"github.com/spikeekips/mitum-currency/currency"
 )
 

@@ -4,7 +4,7 @@ import (
 	"context"
 	"crypto/tls"
 
-	"github.com/ProtoconNet/mitum-account-extension/digest"
+	"github.com/ProtoconNet/mitum-nft/digest"
 	"github.com/pkg/errors"
 
 	currencycmds "github.com/spikeekips/mitum-currency/cmds"

@@ -3,7 +3,7 @@ package cmds
 import (
 	"context"
 
-	"github.com/ProtoconNet/mitum-account-extension/digest"
+	"github.com/ProtoconNet/mitum-nft/digest"
 	"github.com/spikeekips/mitum/util"
 
 	currencycmds "github.com/spikeekips/mitum-currency/cmds"

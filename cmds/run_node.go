@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/ProtoconNet/mitum-account-extension/digest"
+	"github.com/ProtoconNet/mitum-nft/digest"
 	"github.com/pkg/errors"
 
 	"github.com/spikeekips/mitum/base"
