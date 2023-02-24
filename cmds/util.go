@@ -361,55 +361,6 @@ func PEncoder(ctx context.Context) (context.Context, error) {
 	return ctx, nil
 }
 
-// func PLoadDigestDesign(ctx context.Context) (context.Context, error) {
-// 	e := util.StringErrorFunc("failed to load design")
-
-// 	var log *logging.Logging
-// 	var flag launch.DesignFlag
-// 	var enc *jsonenc.Encoder
-
-// 	if err := util.LoadFromContextOK(ctx,
-// 		launch.LoggingContextKey, &log,
-// 		launch.DesignFlagContextKey, &flag,
-// 		launch.EncoderContextKey, &enc,
-// 	); err != nil {
-// 		return ctx, e(err, "")
-// 	}
-
-// 	var digestDesign DigestDesign
-
-// 	switch flag.Scheme() {
-// 	case "file":
-// 		switch d, _, err := DigestDesignFromFile(flag.URL().Path, enc); {
-// 		case err != nil:
-// 			return ctx, e(err, "")
-// 		default:
-// 			digestDesign = d
-// 		}
-
-// 		if i, err := digestDesign.Set(ctx); err != nil {
-// 			return ctx, err
-// 		} else {
-// 			ctx = i
-// 		}
-
-// 		ctx = context.WithValue(ctx, ContextValueDigestDesign, digestDesign)
-
-// 		// switch di, _, err := DigestDesignFromFile(flag.URL().Path, enc); {
-// 		// case err != nil:
-// 		// 	return ctx, e(err, "")
-// 		// default:
-// 		// 	digestDesign = d.DigestDesign
-// 		// }
-// 	default:
-// 		return ctx, e(nil, "unknown digest design uri, %q", flag.URL())
-// 	}
-
-// 	log.Log().Debug().Object("design", digestDesign).Msg("digest design loaded")
-
-// 	return ctx, nil
-// }
-
 func PNetworkHandlers(pctx context.Context) (context.Context, error) {
 	e := util.StringErrorFunc("failed to prepare network handlers")
 
@@ -674,8 +625,8 @@ func SendOperationFilterFunc(ctx context.Context) (
 
 func IsSupportedProposalOperationFactHintFunc() func(hint.Hint) bool {
 	return func(ht hint.Hint) bool {
-		for i := range SupportedProposalOperationFactHinters {
-			s := SupportedProposalOperationFactHinters[i].Hint
+		for _, hinter := range SupportedProposalOperationFactHinters {
+			s := hinter.Hint
 			if ht.Type() != s.Type() {
 				continue
 			}
@@ -686,70 +637,3 @@ func IsSupportedProposalOperationFactHintFunc() func(hint.Hint) bool {
 		return false
 	}
 }
-
-// func ProcessDatabase(ctx context.Context) (context.Context, error) {
-// 	var l DigestDesign
-// 	if err := util.LoadFromContext(ctx, ContextValueDigestDesign, &l); err != nil {
-// 		return ctx, err
-// 	}
-
-// 	if (l == DigestDesign{}) {
-// 		return ctx, nil
-// 	}
-// 	conf := l.Database()
-
-// 	switch {
-// 	case conf.URI().Scheme == "mongodb", conf.URI().Scheme == "mongodb+srv":
-// 		return processMongodbDatabase(ctx, l)
-// 	default:
-// 		return ctx, errors.Errorf("unsupported database type, %q", conf.URI().Scheme)
-// 	}
-// }
-
-// func processMongodbDatabase(ctx context.Context, l DigestDesign) (context.Context, error) {
-// 	conf := l.Database()
-
-// 	/*
-// 		ca, err := cache.NewCacheFromURI(conf.Cache().String())
-// 		if err != nil {
-// 			return ctx, err
-// 		}
-// 	*/
-
-// 	var encs *encoder.Encoders
-// 	if err := util.LoadFromContext(ctx, launch.EncodersContextKey, &encs); err != nil {
-// 		return ctx, err
-// 	}
-
-// 	st, err := mongodbstorage.NewDatabaseFromURI(conf.URI().String(), encs)
-// 	if err != nil {
-// 		return ctx, err
-// 	}
-
-// 	if err := st.Initialize(); err != nil {
-// 		return ctx, err
-// 	}
-
-// 	var db isaac.Database
-// 	if err := util.LoadFromContextOK(ctx, launch.CenterDatabaseContextKey, &db); err != nil {
-// 		return ctx, err
-// 	}
-
-// 	mst, ok := db.(*isaacdatabase.Center)
-// 	if !ok {
-// 		return ctx, errors.Errorf("expected isaacdatabase.Center, not %T", db)
-// 	}
-
-// 	dst, err := loadDigestDatabase(mst, st, false)
-// 	if err != nil {
-// 		return ctx, err
-// 	}
-// 	var log *logging.Logging
-// 	if err := util.LoadFromContextOK(ctx, launch.LoggingContextKey, &log); err != nil {
-// 		return ctx, err
-// 	}
-
-// 	_ = dst.SetLogging(log)
-
-// 	return context.WithValue(ctx, ContextValueDigestDatabase, dst), nil
-// }

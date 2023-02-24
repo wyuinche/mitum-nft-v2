@@ -98,9 +98,7 @@ func (g *GenesisBlockGenerator) generateOperations() error {
 
 	types := map[string]struct{}{}
 
-	for i := range g.facts {
-		fact := g.facts[i]
-
+	for i, fact := range g.facts {
 		var err error
 
 		hinter, ok := fact.(hint.Hinter)
@@ -363,8 +361,7 @@ func (g *GenesisBlockGenerator) newProposalProcessor() (*isaac.DefaultProposalPr
 			return nil, false, nil
 		},
 		func(_ context.Context, operationhash util.Hash) (base.Operation, error) {
-			for i := range g.ops {
-				op := g.ops[i]
+			for _, op := range g.ops {
 				if operationhash.Equal(op.Hash()) {
 					return op, nil
 				}

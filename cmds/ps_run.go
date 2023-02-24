@@ -18,7 +18,6 @@ func DefaultRunPS() *ps.PS {
 	_ = pps.
 		AddOK(launch.PNameEncoder, PEncoder, nil).
 		AddOK(launch.PNameDesign, launch.PLoadDesign, nil, launch.PNameEncoder).
-		// AddOK(PNameDigestDesign, PLoadDigestDesign, nil, launch.PNameEncoder).
 		AddOK(launch.PNameTimeSyncer, launch.PStartTimeSyncer, launch.PCloseTimeSyncer, launch.PNameDesign).
 		AddOK(launch.PNameLocal, launch.PLocal, nil, launch.PNameDesign).
 		AddOK(launch.PNameStorage, launch.PStorage, nil, launch.PNameLocal).
@@ -39,12 +38,6 @@ func DefaultRunPS() *ps.PS {
 			launch.PNameStartMemberlist,
 			launch.PNameStartNetwork,
 			launch.PNameStates)
-		// AddOK(PNameMongoDBsDataBase, ProcessDatabase, nil, PNameDigestDesign, launch.PNameStorage).
-		// AddOK(PNameDigestDataBase, ProcessDigestDatabase, nil, PNameMongoDBsDataBase).
-		// AddOK(PNameDigester, ProcessDigester, nil, PNameDigestDataBase).
-		// AddOK(PNameDigest, ProcessDigestAPI, nil, PNameDigestDesign, PNameDigestDataBase, launch.PNameMemberlist).
-		// AddOK(PNameDigestStart, ProcessStartDigestAPI, nil, PNameDigest).
-		// AddOK(PNameStartDigester, ProcessStartDigester, nil, PNameDigestStart)
 
 	_ = pps.POK(launch.PNameEncoder).
 		PostAddOK(launch.PNameAddHinters, PAddHinters)

@@ -7,12 +7,10 @@ import (
 	"os"
 
 	"github.com/rs/zerolog"
-	"github.com/spikeekips/mitum-currency/cmds"
 	"github.com/spikeekips/mitum/launch"
 	"github.com/spikeekips/mitum/util"
 	"github.com/spikeekips/mitum/util/encoder"
 	jsonenc "github.com/spikeekips/mitum/util/encoder/json"
-	"github.com/spikeekips/mitum/util/localtime"
 	"github.com/spikeekips/mitum/util/logging"
 	"github.com/spikeekips/mitum/util/ps"
 )
@@ -83,19 +81,4 @@ func PAddHinters(ctx context.Context) (context.Context, error) {
 	}
 
 	return ctx, nil
-}
-
-type OperationFlags struct {
-	Privatekey cmds.PrivatekeyFlag `arg:"" name:"privatekey" help:"privatekey to sign operation" required:"true"`
-	Token      string              `help:"token for operation" optional:""`
-	NetworkID  NetworkIDFlag       `name:"network-id" help:"network-id" required:"true"`
-	Pretty     bool                `name:"pretty" help:"pretty format"`
-}
-
-func (op *OperationFlags) IsValid([]byte) error {
-	if len(op.Token) < 1 {
-		op.Token = localtime.Now().UTC().String()
-	}
-
-	return op.NetworkID.NetworkID().IsValid(nil)
 }
