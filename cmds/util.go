@@ -16,9 +16,9 @@ import (
 	"os"
 	"time"
 
-	"github.com/ProtoconNet/mitum-currency-extension/currency"
+	extensioncurrency "github.com/ProtoconNet/mitum-currency-extension/currency"
 	"github.com/pkg/errors"
-	mitumcurrency "github.com/spikeekips/mitum-currency/currency"
+	"github.com/spikeekips/mitum-currency/currency"
 	bsonenc "github.com/spikeekips/mitum-currency/digest/util/bson"
 	"github.com/spikeekips/mitum/base"
 	"github.com/spikeekips/mitum/isaac"
@@ -160,17 +160,17 @@ func POperationProcessorsMap(ctx context.Context) (context.Context, error) {
 
 	set := hint.NewCompatibleSet()
 
-	opr := currency.NewOperationProcessor()
-	opr.SetProcessor(mitumcurrency.CreateAccountsHint, currency.NewCreateAccountsProcessor())
-	opr.SetProcessor(mitumcurrency.KeyUpdaterHint, currency.NewKeyUpdaterProcessor())
-	opr.SetProcessor(mitumcurrency.TransfersHint, currency.NewTransfersProcessor())
-	opr.SetProcessor(currency.CurrencyRegisterHint, currency.NewCurrencyRegisterProcessor(params.Threshold()))
-	opr.SetProcessor(currency.CurrencyPolicyUpdaterHint, currency.NewCurrencyPolicyUpdaterProcessor(params.Threshold()))
-	opr.SetProcessor(mitumcurrency.SuffrageInflationHint, currency.NewSuffrageInflationProcessor(params.Threshold()))
-	opr.SetProcessor(currency.CreateContractAccountsHint, currency.NewCreateContractAccountsProcessor())
-	opr.SetProcessor(currency.WithdrawsHint, currency.NewWithdrawsProcessor())
+	opr := extensioncurrency.NewOperationProcessor()
+	opr.SetProcessor(currency.CreateAccountsHint, extensioncurrency.NewCreateAccountsProcessor())
+	opr.SetProcessor(currency.KeyUpdaterHint, extensioncurrency.NewKeyUpdaterProcessor())
+	opr.SetProcessor(currency.TransfersHint, extensioncurrency.NewTransfersProcessor())
+	opr.SetProcessor(currency.CurrencyRegisterHint, extensioncurrency.NewCurrencyRegisterProcessor(params.Threshold()))
+	opr.SetProcessor(currency.CurrencyPolicyUpdaterHint, extensioncurrency.NewCurrencyPolicyUpdaterProcessor(params.Threshold()))
+	opr.SetProcessor(currency.SuffrageInflationHint, extensioncurrency.NewSuffrageInflationProcessor(params.Threshold()))
+	opr.SetProcessor(extensioncurrency.CreateContractAccountsHint, extensioncurrency.NewCreateContractAccountsProcessor())
+	opr.SetProcessor(extensioncurrency.WithdrawsHint, extensioncurrency.NewWithdrawsProcessor())
 
-	_ = set.Add(mitumcurrency.CreateAccountsHint, func(height base.Height) (base.OperationProcessor, error) {
+	_ = set.Add(currency.CreateAccountsHint, func(height base.Height) (base.OperationProcessor, error) {
 		return opr.New(
 			height,
 			db.State,
@@ -179,7 +179,7 @@ func POperationProcessorsMap(ctx context.Context) (context.Context, error) {
 		)
 	})
 
-	_ = set.Add(mitumcurrency.KeyUpdaterHint, func(height base.Height) (base.OperationProcessor, error) {
+	_ = set.Add(currency.KeyUpdaterHint, func(height base.Height) (base.OperationProcessor, error) {
 		return opr.New(
 			height,
 			db.State,
@@ -188,7 +188,7 @@ func POperationProcessorsMap(ctx context.Context) (context.Context, error) {
 		)
 	})
 
-	_ = set.Add(mitumcurrency.TransfersHint, func(height base.Height) (base.OperationProcessor, error) {
+	_ = set.Add(currency.TransfersHint, func(height base.Height) (base.OperationProcessor, error) {
 		return opr.New(
 			height,
 			db.State,
@@ -215,7 +215,7 @@ func POperationProcessorsMap(ctx context.Context) (context.Context, error) {
 		)
 	})
 
-	_ = set.Add(mitumcurrency.SuffrageInflationHint, func(height base.Height) (base.OperationProcessor, error) {
+	_ = set.Add(currency.SuffrageInflationHint, func(height base.Height) (base.OperationProcessor, error) {
 		return opr.New(
 			height,
 			db.State,
@@ -224,7 +224,7 @@ func POperationProcessorsMap(ctx context.Context) (context.Context, error) {
 		)
 	})
 
-	_ = set.Add(currency.CreateContractAccountsHint, func(height base.Height) (base.OperationProcessor, error) {
+	_ = set.Add(extensioncurrency.CreateContractAccountsHint, func(height base.Height) (base.OperationProcessor, error) {
 		return opr.New(
 			height,
 			db.State,
@@ -233,7 +233,7 @@ func POperationProcessorsMap(ctx context.Context) (context.Context, error) {
 		)
 	})
 
-	_ = set.Add(currency.WithdrawsHint, func(height base.Height) (base.OperationProcessor, error) {
+	_ = set.Add(extensioncurrency.WithdrawsHint, func(height base.Height) (base.OperationProcessor, error) {
 		return opr.New(
 			height,
 			db.State,

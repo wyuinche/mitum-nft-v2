@@ -3,10 +3,10 @@ package cmds
 import (
 	"context"
 
-	"github.com/ProtoconNet/mitum-currency-extension/currency"
+	extensioncurrency "github.com/ProtoconNet/mitum-currency-extension/currency"
 	"github.com/pkg/errors"
 	"github.com/rs/zerolog"
-	mitumcurrency "github.com/spikeekips/mitum-currency/currency"
+	"github.com/spikeekips/mitum-currency/currency"
 	"github.com/spikeekips/mitum/base"
 	"github.com/spikeekips/mitum/isaac"
 	isaacblock "github.com/spikeekips/mitum/isaac/block"
@@ -121,7 +121,7 @@ func (g *GenesisBlockGenerator) generateOperations() error {
 			}
 
 			g.ops[i], err = g.networkPolicyOperation(fact)
-		case ht.IsCompatible(currency.GenesisCurrenciesFactHint):
+		case ht.IsCompatible(extensioncurrency.GenesisCurrenciesFactHint):
 			if _, found := types[ht.String()]; found {
 				return errors.Errorf("multiple GenesisCurrencies operation found")
 			}
@@ -189,19 +189,19 @@ func (g *GenesisBlockGenerator) networkPolicyOperation(i base.Fact) (base.Operat
 func (g *GenesisBlockGenerator) genesisCurrenciesOperation(i base.Fact, token []byte) (base.Operation, error) {
 	e := util.StringErrorFunc("failed to make genesisCurrencies operation")
 
-	basefact, ok := i.(currency.GenesisCurrenciesFact)
+	basefact, ok := i.(extensioncurrency.GenesisCurrenciesFact)
 	if !ok {
 		return nil, e(nil, "expected GenesisCurrenciesFact, not %T", i)
 	}
-	acks, err := mitumcurrency.NewBaseAccountKeys(basefact.Keys().Keys(), basefact.Keys().Threshold())
+	acks, err := currency.NewBaseAccountKeys(basefact.Keys().Keys(), basefact.Keys().Threshold())
 	if err != nil {
 		return nil, e(err, "")
 	}
-	fact := currency.NewGenesisCurrenciesFact(token, basefact.GenesisNodeKey(), acks, basefact.Currencies())
+	fact := extensioncurrency.NewGenesisCurrenciesFact(token, basefact.GenesisNodeKey(), acks, basefact.Currencies())
 	if err := fact.IsValid(g.networkID); err != nil {
 		return nil, e(err, "")
 	}
-	op := currency.NewGenesisCurrencies(fact)
+	op := extensioncurrency.NewGenesisCurrencies(fact)
 	if err := op.Sign(g.local.Privatekey(), g.networkID); err != nil {
 		return nil, e(err, "")
 	}
