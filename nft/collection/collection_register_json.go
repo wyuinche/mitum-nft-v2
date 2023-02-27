@@ -59,7 +59,7 @@ type CollectionRegisterFactJSONMarshaler struct {
 	base.BaseFactJSONMarshaler
 	Sender   base.Address           `json:"sender"`
 	Form     CollectionRegisterForm `json:"form"`
-	Currency currency.CurrencyID    `json:"collection"`
+	Currency currency.CurrencyID    `json:"currency"`
 }
 
 func (fact CollectionRegisterFact) MarshalJSON() ([]byte, error) {
