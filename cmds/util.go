@@ -17,6 +17,7 @@ import (
 	"time"
 
 	extensioncurrency "github.com/ProtoconNet/mitum-currency-extension/currency"
+	"github.com/ProtoconNet/mitum-nft/nft/collection"
 	"github.com/pkg/errors"
 	"github.com/spikeekips/mitum-currency/currency"
 	bsonenc "github.com/spikeekips/mitum-currency/digest/util/bson"
@@ -169,6 +170,7 @@ func POperationProcessorsMap(ctx context.Context) (context.Context, error) {
 	opr.SetProcessor(currency.SuffrageInflationHint, extensioncurrency.NewSuffrageInflationProcessor(params.Threshold()))
 	opr.SetProcessor(extensioncurrency.CreateContractAccountsHint, extensioncurrency.NewCreateContractAccountsProcessor())
 	opr.SetProcessor(extensioncurrency.WithdrawsHint, extensioncurrency.NewWithdrawsProcessor())
+	opr.SetProcessor(collection.CollectionRegisterHint, collection.NewCollectionRegisterProcessor())
 
 	_ = set.Add(currency.CreateAccountsHint, func(height base.Height) (base.OperationProcessor, error) {
 		return opr.New(
@@ -234,6 +236,15 @@ func POperationProcessorsMap(ctx context.Context) (context.Context, error) {
 	})
 
 	_ = set.Add(extensioncurrency.WithdrawsHint, func(height base.Height) (base.OperationProcessor, error) {
+		return opr.New(
+			height,
+			db.State,
+			nil,
+			nil,
+		)
+	})
+
+	_ = set.Add(collection.CollectionRegisterHint, func(height base.Height) (base.OperationProcessor, error) {
 		return opr.New(
 			height,
 			db.State,

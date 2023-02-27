@@ -74,8 +74,7 @@ func NewNFT(
 }
 
 func (n NFT) IsValid([]byte) error {
-	if err := util.CheckIsValiders(
-		nil, false,
+	if err := util.CheckIsValiders(nil, false,
 		n.id,
 		n.owner,
 		n.hash,

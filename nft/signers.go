@@ -70,8 +70,8 @@ func (sgns Signers) IsValid([]byte) error {
 func (sgns Signers) Bytes() []byte {
 	bs := make([][]byte, len(sgns.signers))
 
-	for i := range sgns.signers {
-		bs[i] = sgns.signers[i].Bytes()
+	for i, signer := range sgns.signers {
+		bs[i] = signer.Bytes()
 	}
 
 	return util.ConcatBytesSlice(
@@ -90,8 +90,8 @@ func (sgns Signers) Signers() []Signer {
 
 func (sgns Signers) Addresses() []base.Address {
 	as := make([]base.Address, len(sgns.signers))
-	for i := range sgns.signers {
-		as[i] = sgns.signers[i].Account()
+	for i, signer := range sgns.signers {
+		as[i] = signer.Account()
 	}
 	return as
 }

@@ -3,6 +3,8 @@ package cmds
 import (
 	extensioncurrency "github.com/ProtoconNet/mitum-currency-extension/currency"
 	isaacoperation "github.com/ProtoconNet/mitum-currency-extension/isaac"
+	"github.com/ProtoconNet/mitum-nft/nft"
+	"github.com/ProtoconNet/mitum-nft/nft/collection"
 	"github.com/pkg/errors"
 	"github.com/spikeekips/mitum-currency/currency"
 	"github.com/spikeekips/mitum/launch"
@@ -57,6 +59,14 @@ var hinters = []encoder.DecodeDetail{
 	{Hint: isaacoperation.SuffrageDisjoinHint, Instance: isaacoperation.SuffrageDisjoin{}},
 	{Hint: isaacoperation.FixedSuffrageCandidateLimiterRuleHint, Instance: isaacoperation.FixedSuffrageCandidateLimiterRule{}},
 	{Hint: isaacoperation.MajoritySuffrageCandidateLimiterRuleHint, Instance: isaacoperation.MajoritySuffrageCandidateLimiterRule{}},
+	{Hint: nft.SignerHint, Instance: nft.Signer{}},
+	{Hint: nft.SignersHint, Instance: nft.Signers{}},
+	{Hint: nft.NFTIDHint, Instance: nft.NFTID{}},
+	{Hint: nft.NFTHint, Instance: nft.NFT{}},
+	{Hint: nft.DesignHint, Instance: nft.Design{}},
+	{Hint: collection.CollectionPolicyHint, Instance: collection.CollectionPolicy{}},
+	{Hint: collection.CollectionRegisterFormHint, Instance: collection.CollectionRegisterForm{}},
+	{Hint: collection.CollectionRegisterHint, Instance: collection.CollectionRegister{}},
 }
 
 var supportedProposalOperationFactHinters = []encoder.DecodeDetail{
@@ -74,6 +84,7 @@ var supportedProposalOperationFactHinters = []encoder.DecodeDetail{
 	{Hint: currency.SuffrageInflationFactHint, Instance: currency.SuffrageInflationFact{}},
 	{Hint: extensioncurrency.CreateContractAccountsFactHint, Instance: extensioncurrency.CreateContractAccountsFact{}},
 	{Hint: extensioncurrency.WithdrawsFactHint, Instance: extensioncurrency.WithdrawsFact{}},
+	{Hint: collection.CollectionRegisterFactHint, Instance: collection.CollectionRegisterFact{}},
 }
 
 func init() {

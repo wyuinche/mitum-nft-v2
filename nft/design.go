@@ -17,8 +17,7 @@ type PaymentParameter uint
 
 func (pp PaymentParameter) IsValid([]byte) error {
 	if uint(pp) > MaxPaymentParameter {
-		return util.ErrInvalid.Errorf(
-			"payment parameter over max, %d > %d", pp, MaxPaymentParameter)
+		return util.ErrInvalid.Errorf("payment parameter over max, %d > %d", pp, MaxPaymentParameter)
 	}
 
 	return nil
@@ -41,7 +40,7 @@ func (uri URI) IsValid([]byte) error {
 		return err
 	}
 
-	if l := len(uri); l > 1000 {
+	if l := len(uri); l > MaxURILength {
 		return util.ErrInvalid.Errorf("uri length over max, %d > %d", l, MaxURILength)
 	}
 
@@ -83,13 +82,13 @@ func NewDesign(parent base.Address, creator base.Address, symbol extensioncurren
 }
 
 func (de Design) IsValid([]byte) error {
-	if err := util.CheckIsValiders(
-		nil, false,
+	if err := util.CheckIsValiders(nil, false,
 		de.BaseHinter,
 		de.parent,
 		de.creator,
 		de.symbol,
-		de.policy); err != nil {
+		de.policy,
+	); err != nil {
 		return err
 	}
 
