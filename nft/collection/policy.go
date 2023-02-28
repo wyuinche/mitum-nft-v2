@@ -83,15 +83,15 @@ func (policy CollectionPolicy) IsValid([]byte) error {
 		return util.ErrInvalid.Errorf("whites over allowed, %d > %d", l, MaxWhites)
 	}
 
-	founds := map[base.Address]struct{}{}
+	founds := map[string]struct{}{}
 	for _, white := range policy.whites {
 		if err := white.IsValid(nil); err != nil {
 			return err
 		}
-		if _, found := founds[white]; found {
+		if _, found := founds[white.String()]; found {
 			return util.ErrInvalid.Errorf("duplicate white found, %q", white)
 		}
-		founds[white] = struct{}{}
+		founds[white.String()] = struct{}{}
 	}
 
 	return nil
