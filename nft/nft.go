@@ -6,7 +6,6 @@ import (
 	"github.com/spikeekips/mitum/base"
 	"github.com/spikeekips/mitum/util"
 	"github.com/spikeekips/mitum/util/hint"
-	"github.com/spikeekips/mitum/util/valuehash"
 )
 
 var MaxNFTHashLength = 1024
@@ -114,14 +113,6 @@ func (n NFT) Bytes() []byte {
 	)
 }
 
-func (n NFT) Hash() util.Hash {
-	return n.GenerateHash()
-}
-
-func (n NFT) GenerateHash() util.Hash {
-	return valuehash.NewSHA256(n.Bytes())
-}
-
 func (n NFT) ID() NFTID {
 	return n.id
 }
@@ -134,7 +125,7 @@ func (n NFT) Owner() base.Address {
 	return n.owner
 }
 
-func (n NFT) NftHash() NFTHash {
+func (n NFT) NFTHash() NFTHash {
 	return n.hash
 }
 
@@ -167,7 +158,7 @@ func (n NFT) Equal(cn NFT) bool {
 		return false
 	}
 
-	if n.NftHash() != cn.NftHash() {
+	if n.NFTHash() != cn.NFTHash() {
 		return false
 	}
 
