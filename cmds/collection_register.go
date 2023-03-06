@@ -11,6 +11,7 @@ import (
 
 	"github.com/spikeekips/mitum-currency/cmds"
 	"github.com/spikeekips/mitum/base"
+	"github.com/spikeekips/mitum/util"
 )
 
 type CollectionRegisterCommand struct {
@@ -76,7 +77,7 @@ func (cmd *CollectionRegisterCommand) parseFlags() error {
 	var white base.Address = nil
 	if cmd.White.String() != "" {
 		if a, err := cmd.White.Encode(enc); err != nil {
-			return errors.Wrapf(err, "invalid white format; %q", cmd.White)
+			return errors.Wrapf(err, "invalid white format, %q", cmd.White)
 		} else {
 			white = a
 		}
@@ -117,15 +118,17 @@ func (cmd *CollectionRegisterCommand) parseFlags() error {
 }
 
 func (cmd *CollectionRegisterCommand) createOperation() (base.Operation, error) {
+	e := util.StringErrorFunc("failed to create collection-register operation")
+
 	fact := nftcollection.NewCollectionRegisterFact([]byte(cmd.Token), cmd.sender, cmd.form, cmd.Currency.CID)
 
 	op, err := nftcollection.NewCollectionRegister(fact)
 	if err != nil {
-		return nil, errors.Wrap(err, "failed to create collection-register operation")
+		return nil, e(err, "")
 	}
 	err = op.HashSign(cmd.Privatekey, cmd.NetworkID.NetworkID())
 	if err != nil {
-		return nil, errors.Wrap(err, "failed to create collection-register operation")
+		return nil, e(err, "")
 	}
 
 	return op, nil

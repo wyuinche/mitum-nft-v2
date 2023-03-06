@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	extensioncurrency "github.com/ProtoconNet/mitum-currency-extension/currency"
+	"github.com/ProtoconNet/mitum-nft/nft"
 	"github.com/pkg/errors"
 	"github.com/spikeekips/mitum-currency/currency"
 	"github.com/spikeekips/mitum/base"
@@ -176,6 +177,172 @@ func NewCollectionLastNFTIndexStateMergeValue(key string, stv base.StateValue) b
 		stv,
 		func(height base.Height, st base.State) base.StateValueMerger {
 			return NewCollectionLastNFTIndexStateValueMerger(height, key, st)
+		},
+	)
+}
+
+var (
+	NFTStateValueHint = hint.MustNewHint("nft-state-value-v0.0.1")
+	StateKeyNFTSuffix = ":nft"
+)
+
+type NFTStateValue struct {
+	hint.BaseHinter
+	n nft.NFT
+}
+
+func NewNFTStateValue(n nft.NFT) NFTStateValue {
+	return NFTStateValue{
+		BaseHinter: hint.NewBaseHinter(NFTStateValueHint),
+		n:          n,
+	}
+}
+
+func (ns NFTStateValue) Hint() hint.Hint {
+	return ns.BaseHinter.Hint()
+}
+
+func (ns NFTStateValue) IsValid([]byte) error {
+	e := util.ErrInvalid.Errorf("invalid NFTStateValue")
+
+	if err := ns.BaseHinter.IsValid(NFTStateValueHint.Type().Bytes()); err != nil {
+		return e.Wrap(err)
+	}
+
+	if err := ns.n.IsValid(nil); err != nil {
+		return e.Wrap(err)
+	}
+
+	return nil
+}
+
+func (ns NFTStateValue) HashBytes() []byte {
+	return ns.n.Bytes()
+}
+
+func StateNFTValue(st base.State) (nft.NFT, error) {
+	v := st.Value()
+	if v == nil {
+		return nft.NFT{}, util.ErrNotFound.Errorf("nft not found in State")
+	}
+
+	ns, ok := v.(NFTStateValue)
+	if !ok {
+		return nft.NFT{}, errors.Errorf("invalid nft value found, %T", v)
+	}
+
+	return ns.n, nil
+}
+
+func IsStateNFTKey(key string) bool {
+	return strings.HasSuffix(key, StateKeyNFTSuffix)
+}
+
+func StateKeyNFT(id nft.NFTID) string {
+	return fmt.Sprintf("%s%s", id, StateKeyNFTSuffix)
+}
+
+type NFTStateValueMerger struct {
+	*base.BaseStateValueMerger
+}
+
+func NewNFTStateValueMerger(height base.Height, key string, st base.State) *NFTStateValueMerger {
+	s := &NFTStateValueMerger{
+		BaseStateValueMerger: base.NewBaseStateValueMerger(height, key, st),
+	}
+
+	return s
+}
+
+func NewNFTStateMergeValue(key string, stv base.StateValue) base.StateMergeValue {
+	return base.NewBaseStateMergeValue(
+		key,
+		stv,
+		func(height base.Height, st base.State) base.StateValueMerger {
+			return NewNFTStateValueMerger(height, key, st)
+		},
+	)
+}
+
+var (
+	NFTBoxStateValueHint = hint.MustNewHint("nft-box-state-value-v0.0.1")
+	StateKeyNFTBoxSuffix = ":nftbox"
+)
+
+type NFTBoxStateValue struct {
+	hint.BaseHinter
+	box NFTBox
+}
+
+func NewNFTBoxStateValue(box NFTBox) NFTBoxStateValue {
+	return NFTBoxStateValue{
+		BaseHinter: hint.NewBaseHinter(NFTBoxStateValueHint),
+		box:        box,
+	}
+}
+
+func (nb NFTBoxStateValue) Hint() hint.Hint {
+	return nb.BaseHinter.Hint()
+}
+
+func (nb NFTBoxStateValue) IsValid([]byte) error {
+	e := util.ErrInvalid.Errorf("invalid NFTBoxStateValue")
+
+	if err := nb.BaseHinter.IsValid(NFTBoxStateValueHint.Type().Bytes()); err != nil {
+		return e.Wrap(err)
+	}
+
+	if err := nb.box.IsValid(nil); err != nil {
+		return e.Wrap(err)
+	}
+
+	return nil
+}
+
+func (nb NFTBoxStateValue) HashBytes() []byte {
+	return nb.box.Bytes()
+}
+
+func StateNFTBoxValue(st base.State) (NFTBox, error) {
+	v := st.Value()
+	if v == nil {
+		return NFTBox{}, util.ErrNotFound.Errorf("nft box not found in State")
+	}
+
+	nb, ok := v.(NFTBoxStateValue)
+	if !ok {
+		return NFTBox{}, errors.Errorf("invalid nft box value found, %T", v)
+	}
+
+	return nb.box, nil
+}
+
+func IsStateNFTBoxKey(key string) bool {
+	return strings.HasSuffix(key, StateKeyNFTBoxSuffix)
+}
+
+func StateKeyNFTBox(id extensioncurrency.ContractID) string {
+	return fmt.Sprintf("%s%s", id, StateKeyNFTBoxSuffix)
+}
+
+type NFTBoxStateValueMerger struct {
+	*base.BaseStateValueMerger
+}
+
+func NewNFTBoxStateValueMerger(height base.Height, key string, st base.State) *NFTBoxStateValueMerger {
+	s := &NFTBoxStateValueMerger{
+		BaseStateValueMerger: base.NewBaseStateValueMerger(height, key, st),
+	}
+
+	return s
+}
+
+func NewNFTBoxStateMergeValue(key string, stv base.StateValue) base.StateMergeValue {
+	return base.NewBaseStateMergeValue(
+		key,
+		stv,
+		func(height base.Height, st base.State) base.StateValueMerger {
+			return NewNFTBoxStateValueMerger(height, key, st)
 		},
 	)
 }

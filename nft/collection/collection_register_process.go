@@ -34,7 +34,7 @@ func NewCollectionRegisterProcessor() extensioncurrency.GetNewProcessor {
 		newPreProcessConstraintFunc base.NewOperationProcessorProcessFunc,
 		newProcessConstraintFunc base.NewOperationProcessorProcessFunc,
 	) (base.OperationProcessor, error) {
-		e := util.StringErrorFunc("failed to create new CollectionRegisterUpdaterProcessor")
+		e := util.StringErrorFunc("failed to create new CollectionRegisterProcessor")
 
 		nopp := collectionRegisterProcessorPool.Get()
 		opp, ok := nopp.(*CollectionRegisterProcessor)
@@ -76,13 +76,25 @@ func (opp *CollectionRegisterProcessor) PreProcess(
 		return ctx, base.NewBaseOperationProcessReasonError("sender is contract account, %q", fact.Sender()), nil
 	}
 
-	if st, err := existsState(extensioncurrency.StateKeyContractAccount(fact.Form().Target()), "contract account", getStateFunc); err != nil {
+	if err := checkFactSignsByState(fact.Sender(), op.Signs(), getStateFunc); err != nil {
+		return ctx, base.NewBaseOperationProcessReasonError("invalid signing: %w", err), nil
+	}
+
+	st, err := existsState(extensioncurrency.StateKeyContractAccount(fact.Form().Target()), "key of contract account", getStateFunc)
+	if err != nil {
 		return ctx, base.NewBaseOperationProcessReasonError("target contract account not found, %q: %w", fact.Form().Target(), err), nil
-	} else if ca, err := extensioncurrency.StateContractAccountValue(st); err != nil {
+	}
+
+	ca, err := extensioncurrency.StateContractAccountValue(st)
+	if err != nil {
 		return ctx, base.NewBaseOperationProcessReasonError("failed to get state value of contract account, %q: %w", fact.Form().Target(), err), nil
-	} else if !ca.Owner().Equal(fact.Sender()) {
+	}
+
+	if !ca.Owner().Equal(fact.Sender()) {
 		return ctx, base.NewBaseOperationProcessReasonError("sender is not owner of contract account, %q, %q", fact.Sender(), ca.Owner()), nil
-	} else if !ca.IsActive() {
+	}
+
+	if !ca.IsActive() {
 		return ctx, base.NewBaseOperationProcessReasonError("deactivated contract account, %q", fact.Form().Target()), nil
 	}
 
@@ -101,10 +113,6 @@ func (opp *CollectionRegisterProcessor) PreProcess(
 		} else if err = checkNotExistsState(extensioncurrency.StateKeyContractAccount(white), getStateFunc); err != nil {
 			return ctx, base.NewBaseOperationProcessReasonError("whitelist account is contract account, %q: %w", white, err), nil
 		}
-	}
-
-	if err := checkFactSignsByState(fact.Sender(), op.Signs(), getStateFunc); err != nil {
-		return ctx, base.NewBaseOperationProcessReasonError("invalid signing: %w", err), nil
 	}
 
 	return ctx, nil, nil

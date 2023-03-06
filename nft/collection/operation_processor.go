@@ -230,6 +230,13 @@ func (opr *OperationProcessor) checkDuplication(op base.Operation) error {
 		}
 		did = fact.Sender().String()
 		didtype = DuplicationTypeSender
+	case Mint:
+		fact, ok := t.Fact().(MintFact)
+		if !ok {
+			return errors.Errorf("expected MintFact, not %T", t.Fact())
+		}
+		did = fact.Sender().String()
+		didtype = DuplicationTypeSender
 	default:
 		return nil
 	}
@@ -274,28 +281,9 @@ func (opr *OperationProcessor) checkNewAddressDuplication(as []base.Address) err
 
 func (opr *OperationProcessor) Close() error {
 	opr.Lock()
+
 	defer opr.Unlock()
-
 	defer opr.close()
-	/*
-		if len(opr.fee) > 0 {
-			op, err := NewFeeOperation(NewFeeOperationFact(opr.Height(), opr.fee))
-			if err != nil {
-				return err
-			}
-
-			pr, err := NewFeeOperationProcessor(opr.Height(), opr.GetStateFunc)
-			if err != nil {
-				return err
-			}
-
-				if err := pr.Process(nil, op, opr.GetStateFunc); err != nil {
-					return err
-				}
-				opr.pool.AddOperations(op)
-
-		}
-	*/
 
 	return nil
 }
@@ -326,7 +314,8 @@ func (opr *OperationProcessor) getNewProcessor(op base.Operation) (base.Operatio
 		extensioncurrency.CurrencyRegister,
 		extensioncurrency.CurrencyPolicyUpdater,
 		currency.SuffrageInflation,
-		CollectionRegister:
+		CollectionRegister,
+		Mint:
 		return nil, false, errors.Errorf("%T needs SetProcessor", t)
 	default:
 		return nil, false, nil

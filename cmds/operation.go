@@ -14,6 +14,7 @@ type OperationCommand struct {
 	CurrencyPolicyUpdater cmds.CurrencyPolicyUpdaterCommand `cmd:"" name:"currency-policy-updater" help:"update currency policy"`
 	SuffrageInflation     cmds.SuffrageInflationCommand     `cmd:"" name:"suffrage-inflation" help:"suffrage inflation operation"`
 	CollectionRegister    CollectionRegisterCommand         `cmd:"" name:"collection-register" help:"register new collection design"`
+	Mint                  MintCommand                       `cmd:"" name:"mint" help:"mint new nft to collection"`
 	SuffrageCandidate     cmds.SuffrageCandidateCommand     `cmd:"" name:"suffrage-candidate" help:"suffrage candidate operation"`
 	SuffrageJoin          cmds.SuffrageJoinCommand          `cmd:"" name:"suffrage-join" help:"suffrage join operation"`
 	SuffrageDisjoin       cmds.SuffrageDisjoinCommand       `cmd:"" name:"suffrage-disjoin" help:"suffrage disjoin operation"` // revive:disable-line:line-length-limit
@@ -30,6 +31,7 @@ func NewOperationCommand() OperationCommand {
 		CurrencyPolicyUpdater: cmds.NewCurrencyPolicyUpdaterCommand(),
 		SuffrageInflation:     cmds.NewSuffrageInflationCommand(),
 		CollectionRegister:    NewCollectionRegisterCommand(),
+		Mint:                  NewMintCommand(),
 		SuffrageCandidate:     cmds.NewSuffrageCandidateCommand(),
 		SuffrageJoin:          cmds.NewSuffrageJoinCommand(),
 		SuffrageDisjoin:       cmds.NewSuffrageDisjoinCommand(),

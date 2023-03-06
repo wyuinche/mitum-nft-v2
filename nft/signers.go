@@ -45,17 +45,17 @@ func (sgns Signers) IsValid([]byte) error {
 	}
 
 	var total uint = 0
-	founds := map[base.Address]struct{}{}
+	founds := map[string]struct{}{}
 	for _, signer := range sgns.signers {
 		if err := signer.IsValid(nil); err != nil {
 			return err
 		}
 
 		acc := signer.Account()
-		if _, found := founds[acc]; found {
+		if _, found := founds[acc.String()]; found {
 			return util.ErrInvalid.Errorf("duplicate signer found, %q", acc)
 		}
-		founds[acc] = struct{}{}
+		founds[acc.String()] = struct{}{}
 
 		total += signer.Share()
 	}

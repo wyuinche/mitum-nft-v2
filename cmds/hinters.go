@@ -64,9 +64,17 @@ var hinters = []encoder.DecodeDetail{
 	{Hint: nft.NFTIDHint, Instance: nft.NFTID{}},
 	{Hint: nft.NFTHint, Instance: nft.NFT{}},
 	{Hint: nft.DesignHint, Instance: nft.Design{}},
+	{Hint: collection.CollectionLastNFTIndexStateValueHint, Instance: collection.CollectionLastNFTIndexStateValue{}},
+	{Hint: collection.NFTStateValueHint, Instance: collection.NFTStateValue{}},
+	{Hint: collection.NFTBoxHint, Instance: collection.NFTBox{}},
 	{Hint: collection.CollectionPolicyHint, Instance: collection.CollectionPolicy{}},
+	{Hint: collection.CollectionDesignHint, Instance: collection.CollectionDesign{}},
+	{Hint: collection.CollectionDesignStateValueHint, Instance: collection.CollectionDesignStateValue{}},
 	{Hint: collection.CollectionRegisterFormHint, Instance: collection.CollectionRegisterForm{}},
 	{Hint: collection.CollectionRegisterHint, Instance: collection.CollectionRegister{}},
+	{Hint: collection.MintFormHint, Instance: collection.MintForm{}},
+	{Hint: collection.MintItemHint, Instance: collection.MintItem{}},
+	{Hint: collection.MintHint, Instance: collection.Mint{}},
 }
 
 var supportedProposalOperationFactHinters = []encoder.DecodeDetail{
@@ -85,6 +93,7 @@ var supportedProposalOperationFactHinters = []encoder.DecodeDetail{
 	{Hint: extensioncurrency.CreateContractAccountsFactHint, Instance: extensioncurrency.CreateContractAccountsFact{}},
 	{Hint: extensioncurrency.WithdrawsFactHint, Instance: extensioncurrency.WithdrawsFact{}},
 	{Hint: collection.CollectionRegisterFactHint, Instance: collection.CollectionRegisterFact{}},
+	{Hint: collection.MintFactHint, Instance: collection.MintFact{}},
 }
 
 func init() {

@@ -147,23 +147,6 @@ func NewCollectionRegisterFact(token []byte, sender base.Address, form Collectio
 	return fact
 }
 
-func (fact CollectionRegisterFact) Hash() util.Hash {
-	return fact.BaseFact.Hash()
-}
-
-func (fact CollectionRegisterFact) GenerateHash() util.Hash {
-	return valuehash.NewSHA256(fact.Bytes())
-}
-
-func (fact CollectionRegisterFact) Bytes() []byte {
-	return util.ConcatBytesSlice(
-		fact.Token(),
-		fact.sender.Bytes(),
-		fact.form.Bytes(),
-		fact.currency.Bytes(),
-	)
-}
-
 func (fact CollectionRegisterFact) IsValid(b []byte) error {
 	if err := fact.BaseHinter.IsValid(nil); err != nil {
 		return err
@@ -186,6 +169,23 @@ func (fact CollectionRegisterFact) IsValid(b []byte) error {
 	}
 
 	return nil
+}
+
+func (fact CollectionRegisterFact) Hash() util.Hash {
+	return fact.BaseFact.Hash()
+}
+
+func (fact CollectionRegisterFact) GenerateHash() util.Hash {
+	return valuehash.NewSHA256(fact.Bytes())
+}
+
+func (fact CollectionRegisterFact) Bytes() []byte {
+	return util.ConcatBytesSlice(
+		fact.Token(),
+		fact.sender.Bytes(),
+		fact.form.Bytes(),
+		fact.currency.Bytes(),
+	)
 }
 
 func (fact CollectionRegisterFact) Token() base.Token {

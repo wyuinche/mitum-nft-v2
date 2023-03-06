@@ -171,6 +171,7 @@ func POperationProcessorsMap(ctx context.Context) (context.Context, error) {
 	opr.SetProcessor(extensioncurrency.CreateContractAccountsHint, extensioncurrency.NewCreateContractAccountsProcessor())
 	opr.SetProcessor(extensioncurrency.WithdrawsHint, extensioncurrency.NewWithdrawsProcessor())
 	opr.SetProcessor(collection.CollectionRegisterHint, collection.NewCollectionRegisterProcessor())
+	opr.SetProcessor(collection.MintHint, collection.NewMintProcessor())
 
 	_ = set.Add(currency.CreateAccountsHint, func(height base.Height) (base.OperationProcessor, error) {
 		return opr.New(
@@ -245,6 +246,15 @@ func POperationProcessorsMap(ctx context.Context) (context.Context, error) {
 	})
 
 	_ = set.Add(collection.CollectionRegisterHint, func(height base.Height) (base.OperationProcessor, error) {
+		return opr.New(
+			height,
+			db.State,
+			nil,
+			nil,
+		)
+	})
+
+	_ = set.Add(collection.MintHint, func(height base.Height) (base.OperationProcessor, error) {
 		return opr.New(
 			height,
 			db.State,
