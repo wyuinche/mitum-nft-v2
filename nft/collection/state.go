@@ -347,6 +347,89 @@ func NewNFTBoxStateMergeValue(key string, stv base.StateValue) base.StateMergeVa
 	)
 }
 
+var (
+	AgentBoxStateValueHint = hint.MustNewHint("agent-box-state-value-v0.0.1")
+	StateKeyAgentBoxSuffix = ":agentbox"
+)
+
+type AgentBoxStateValue struct {
+	hint.BaseHinter
+	box AgentBox
+}
+
+func NewAgentBoxStateValue(box AgentBox) AgentBoxStateValue {
+	return AgentBoxStateValue{
+		BaseHinter: hint.NewBaseHinter(AgentBoxStateValueHint),
+		box:        box,
+	}
+}
+
+func (ab AgentBoxStateValue) Hint() hint.Hint {
+	return ab.BaseHinter.Hint()
+}
+
+func (ab AgentBoxStateValue) IsValid([]byte) error {
+	e := util.ErrInvalid.Errorf("invalid AgentBoxStateValue")
+
+	if err := ab.BaseHinter.IsValid(AgentBoxStateValueHint.Type().Bytes()); err != nil {
+		return e.Wrap(err)
+	}
+
+	if err := ab.box.IsValid(nil); err != nil {
+		return e.Wrap(err)
+	}
+
+	return nil
+}
+
+func (ab AgentBoxStateValue) HashBytes() []byte {
+	return ab.box.Bytes()
+}
+
+func StateAgentBoxValue(st base.State) (AgentBox, error) {
+	v := st.Value()
+	if v == nil {
+		return AgentBox{}, util.ErrNotFound.Errorf("agent box not found in State")
+	}
+
+	ab, ok := v.(AgentBoxStateValue)
+	if !ok {
+		return AgentBox{}, errors.Errorf("invalid agent box value found, %T", v)
+	}
+
+	return ab.box, nil
+}
+
+func IsStateAgentBoxKey(key string) bool {
+	return strings.HasSuffix(key, StateKeyAgentBoxSuffix)
+}
+
+func StateKeyAgentBox(addr base.Address, collection extensioncurrency.ContractID) string {
+	return fmt.Sprintf("%s-%s%s", addr, collection, StateKeyAgentBoxSuffix)
+}
+
+type AgentBoxStateValueMerger struct {
+	*base.BaseStateValueMerger
+}
+
+func NewAgentBoxStateValueMerger(height base.Height, key string, st base.State) *AgentBoxStateValueMerger {
+	s := &AgentBoxStateValueMerger{
+		BaseStateValueMerger: base.NewBaseStateValueMerger(height, key, st),
+	}
+
+	return s
+}
+
+func NewAgentBoxStateMergeValue(key string, stv base.StateValue) base.StateMergeValue {
+	return base.NewBaseStateMergeValue(
+		key,
+		stv,
+		func(height base.Height, st base.State) base.StateValueMerger {
+			return NewNFTBoxStateValueMerger(height, key, st)
+		},
+	)
+}
+
 func checkExistsState(
 	key string,
 	getState base.GetStateFunc,

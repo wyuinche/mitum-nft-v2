@@ -66,7 +66,10 @@ var hinters = []encoder.DecodeDetail{
 	{Hint: nft.DesignHint, Instance: nft.Design{}},
 	{Hint: collection.CollectionLastNFTIndexStateValueHint, Instance: collection.CollectionLastNFTIndexStateValue{}},
 	{Hint: collection.NFTStateValueHint, Instance: collection.NFTStateValue{}},
+	{Hint: collection.NFTBoxStateValueHint, Instance: collection.NFTBoxStateValue{}},
 	{Hint: collection.NFTBoxHint, Instance: collection.NFTBox{}},
+	{Hint: collection.AgentBoxStateValueHint, Instance: collection.AgentBoxStateValue{}},
+	{Hint: collection.AgentBoxHint, Instance: collection.AgentBox{}},
 	{Hint: collection.CollectionPolicyHint, Instance: collection.CollectionPolicy{}},
 	{Hint: collection.CollectionDesignHint, Instance: collection.CollectionDesign{}},
 	{Hint: collection.CollectionDesignStateValueHint, Instance: collection.CollectionDesignStateValue{}},
@@ -75,6 +78,10 @@ var hinters = []encoder.DecodeDetail{
 	{Hint: collection.MintFormHint, Instance: collection.MintForm{}},
 	{Hint: collection.MintItemHint, Instance: collection.MintItem{}},
 	{Hint: collection.MintHint, Instance: collection.Mint{}},
+	{Hint: collection.DelegateItemHint, Instance: collection.DelegateItem{}},
+	{Hint: collection.DelegateHint, Instance: collection.Delegate{}},
+	// {Hint: collection.ApproveItemHint, Instance: collection.ApproveItem{}},
+	// {Hint: collection.ApproveHint, Instance: collection.Approve{}},
 }
 
 var supportedProposalOperationFactHinters = []encoder.DecodeDetail{
@@ -94,6 +101,8 @@ var supportedProposalOperationFactHinters = []encoder.DecodeDetail{
 	{Hint: extensioncurrency.WithdrawsFactHint, Instance: extensioncurrency.WithdrawsFact{}},
 	{Hint: collection.CollectionRegisterFactHint, Instance: collection.CollectionRegisterFact{}},
 	{Hint: collection.MintFactHint, Instance: collection.MintFact{}},
+	{Hint: collection.DelegateFactHint, Instance: collection.DelegateFact{}},
+	// {Hint: collection.ApproveFactHint, Instance: collection.ApproveFact{}},
 }
 
 func init() {

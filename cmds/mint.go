@@ -18,10 +18,10 @@ type MintCommand struct {
 	baseCommand
 	cmds.OperationFlags
 	Sender           cmds.AddressFlag    `arg:"" name:"sender" help:"sender address" required:"true"`
-	Currency         cmds.CurrencyIDFlag `arg:"" name:"currency" help:"currency id" required:"true"`
 	Collection       string              `arg:"" name:"collection" help:"collection symbol" required:"true"`
 	Hash             string              `arg:"" name:"hash" help:"nft hash" required:"true"`
 	Uri              string              `arg:"" name:"uri" help:"nft uri" required:"true"`
+	Currency         cmds.CurrencyIDFlag `arg:"" name:"currency" help:"currency id" required:"true"`
 	Creator          SignerFlag          `name:"creator" help:"nft contents creator \"<address>,<share>\"" optional:""`
 	Copyrighter      SignerFlag          `name:"copyrighter" help:"nft contents copyrighter \"<address>,<share>\"" optional:""`
 	CreatorTotal     uint                `name:"creator-total" help:"creators total share" optional:""`
@@ -32,9 +32,7 @@ type MintCommand struct {
 
 func NewMintCommand() MintCommand {
 	cmd := NewbaseCommand()
-	return MintCommand{
-		baseCommand: *cmd,
-	}
+	return MintCommand{baseCommand: *cmd}
 }
 
 func (cmd *MintCommand) Run(pctx context.Context) error { // nolint:dupl

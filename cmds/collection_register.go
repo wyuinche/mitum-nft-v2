@@ -18,11 +18,11 @@ type CollectionRegisterCommand struct {
 	baseCommand
 	cmds.OperationFlags
 	Sender     cmds.AddressFlag    `arg:"" name:"sender" help:"sender address" required:"true"`
-	Currency   cmds.CurrencyIDFlag `arg:"" name:"currency" help:"currency id" required:"true"`
 	Target     cmds.AddressFlag    `arg:"" name:"target" help:"target account to register policy" required:"true"`
 	Collection string              `arg:"" name:"collection" help:"collection symbol" required:"true"`
 	Name       string              `arg:"" name:"name" help:"collection name" required:"true"`
 	Royalty    uint                `arg:"" name:"royalty" help:"royalty parameter; 0 <= royalty param < 100" required:"true"`
+	Currency   cmds.CurrencyIDFlag `arg:"" name:"currency" help:"currency id" required:"true"`
 	URI        string              `name:"uri" help:"collection uri" optional:""`
 	White      cmds.AddressFlag    `name:"white" help:"whitelisted address" optional:""`
 	sender     base.Address

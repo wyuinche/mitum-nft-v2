@@ -172,6 +172,8 @@ func POperationProcessorsMap(ctx context.Context) (context.Context, error) {
 	opr.SetProcessor(extensioncurrency.WithdrawsHint, extensioncurrency.NewWithdrawsProcessor())
 	opr.SetProcessor(collection.CollectionRegisterHint, collection.NewCollectionRegisterProcessor())
 	opr.SetProcessor(collection.MintHint, collection.NewMintProcessor())
+	opr.SetProcessor(collection.DelegateHint, collection.NewDelegateProcessor())
+	opr.SetProcessor(collection.ApproveHint, collection.NewApproveProcessor())
 
 	_ = set.Add(currency.CreateAccountsHint, func(height base.Height) (base.OperationProcessor, error) {
 		return opr.New(
@@ -262,6 +264,24 @@ func POperationProcessorsMap(ctx context.Context) (context.Context, error) {
 			nil,
 		)
 	})
+
+	_ = set.Add(collection.DelegateHint, func(height base.Height) (base.OperationProcessor, error) {
+		return opr.New(
+			height,
+			db.State,
+			nil,
+			nil,
+		)
+	})
+
+	// _ = set.Add(collection.ApproveHint, func(height base.Height) (base.OperationProcessor, error) {
+	// 	return opr.New(
+	// 		height,
+	// 		db.State,
+	// 		nil,
+	// 		nil,
+	// 	)
+	// })
 
 	_ = set.Add(isaacoperation.SuffrageCandidateHint, func(height base.Height) (base.OperationProcessor, error) {
 		policy := db.LastNetworkPolicy()
