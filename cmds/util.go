@@ -274,14 +274,14 @@ func POperationProcessorsMap(ctx context.Context) (context.Context, error) {
 		)
 	})
 
-	// _ = set.Add(collection.ApproveHint, func(height base.Height) (base.OperationProcessor, error) {
-	// 	return opr.New(
-	// 		height,
-	// 		db.State,
-	// 		nil,
-	// 		nil,
-	// 	)
-	// })
+	_ = set.Add(collection.ApproveHint, func(height base.Height) (base.OperationProcessor, error) {
+		return opr.New(
+			height,
+			db.State,
+			nil,
+			nil,
+		)
+	})
 
 	_ = set.Add(isaacoperation.SuffrageCandidateHint, func(height base.Height) (base.OperationProcessor, error) {
 		policy := db.LastNetworkPolicy()

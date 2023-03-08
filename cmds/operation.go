@@ -16,10 +16,10 @@ type OperationCommand struct {
 	CollectionRegister    CollectionRegisterCommand         `cmd:"" name:"collection-register" help:"register new collection design"`
 	Mint                  MintCommand                       `cmd:"" name:"mint" help:"mint new nft to collection"`
 	Delegate              DelegateCommand                   `cmd:"" name:"delegate" help:"delegate agent or cancel agent delegation"`
-	// Approve               ApproveCommand                    `cmd:"" name:"approve" help:"approve account for nft"`
-	SuffrageCandidate cmds.SuffrageCandidateCommand `cmd:"" name:"suffrage-candidate" help:"suffrage candidate operation"`
-	SuffrageJoin      cmds.SuffrageJoinCommand      `cmd:"" name:"suffrage-join" help:"suffrage join operation"`
-	SuffrageDisjoin   cmds.SuffrageDisjoinCommand   `cmd:"" name:"suffrage-disjoin" help:"suffrage disjoin operation"` // revive:disable-line:line-length-limit
+	Approve               ApproveCommand                    `cmd:"" name:"approve" help:"approve account for nft"`
+	SuffrageCandidate     cmds.SuffrageCandidateCommand     `cmd:"" name:"suffrage-candidate" help:"suffrage candidate operation"`
+	SuffrageJoin          cmds.SuffrageJoinCommand          `cmd:"" name:"suffrage-join" help:"suffrage join operation"`
+	SuffrageDisjoin       cmds.SuffrageDisjoinCommand       `cmd:"" name:"suffrage-disjoin" help:"suffrage disjoin operation"` // revive:disable-line:line-length-limit
 }
 
 func NewOperationCommand() OperationCommand {
@@ -35,9 +35,9 @@ func NewOperationCommand() OperationCommand {
 		CollectionRegister:    NewCollectionRegisterCommand(),
 		Mint:                  NewMintCommand(),
 		Delegate:              NewDelegateCommand(),
-		// Approve:               NewApproveCommand(),
-		SuffrageCandidate: cmds.NewSuffrageCandidateCommand(),
-		SuffrageJoin:      cmds.NewSuffrageJoinCommand(),
-		SuffrageDisjoin:   cmds.NewSuffrageDisjoinCommand(),
+		Approve:               NewApproveCommand(),
+		SuffrageCandidate:     cmds.NewSuffrageCandidateCommand(),
+		SuffrageJoin:          cmds.NewSuffrageJoinCommand(),
+		SuffrageDisjoin:       cmds.NewSuffrageDisjoinCommand(),
 	}
 }

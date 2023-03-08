@@ -103,15 +103,15 @@ var (
 
 type CollectionLastNFTIndexStateValue struct {
 	hint.BaseHinter
-	collection extensioncurrency.ContractID
-	index      uint64
+	Collection extensioncurrency.ContractID
+	Index      uint64
 }
 
 func NewCollectionLastNFTIndexStateValue(collection extensioncurrency.ContractID, index uint64) CollectionLastNFTIndexStateValue {
 	return CollectionLastNFTIndexStateValue{
 		BaseHinter: hint.NewBaseHinter(CollectionLastNFTIndexStateValueHint),
-		collection: collection,
-		index:      index,
+		Collection: collection,
+		Index:      index,
 	}
 }
 
@@ -126,7 +126,7 @@ func (is CollectionLastNFTIndexStateValue) IsValid([]byte) error {
 		return e.Wrap(err)
 	}
 
-	if err := is.collection.IsValid(nil); err != nil {
+	if err := is.Collection.IsValid(nil); err != nil {
 		return e.Wrap(err)
 	}
 
@@ -134,7 +134,7 @@ func (is CollectionLastNFTIndexStateValue) IsValid([]byte) error {
 }
 
 func (is CollectionLastNFTIndexStateValue) HashBytes() []byte {
-	return util.ConcatBytesSlice(is.collection.Bytes(), util.Uint64ToBytes(is.index))
+	return util.ConcatBytesSlice(is.Collection.Bytes(), util.Uint64ToBytes(is.Index))
 }
 
 func StateCollectionLastNFTIndexValue(st base.State) (uint64, error) {
@@ -148,7 +148,7 @@ func StateCollectionLastNFTIndexValue(st base.State) (uint64, error) {
 		return 0, errors.Errorf("invalid collection last nft index value found, %T", v)
 	}
 
-	return isv.index, nil
+	return isv.Index, nil
 }
 
 func IsStateCollectionLastNFTIndexKey(key string) bool {
@@ -188,13 +188,13 @@ var (
 
 type NFTStateValue struct {
 	hint.BaseHinter
-	n nft.NFT
+	NFT nft.NFT
 }
 
 func NewNFTStateValue(n nft.NFT) NFTStateValue {
 	return NFTStateValue{
 		BaseHinter: hint.NewBaseHinter(NFTStateValueHint),
-		n:          n,
+		NFT:        n,
 	}
 }
 
@@ -209,7 +209,7 @@ func (ns NFTStateValue) IsValid([]byte) error {
 		return e.Wrap(err)
 	}
 
-	if err := ns.n.IsValid(nil); err != nil {
+	if err := ns.NFT.IsValid(nil); err != nil {
 		return e.Wrap(err)
 	}
 
@@ -217,7 +217,7 @@ func (ns NFTStateValue) IsValid([]byte) error {
 }
 
 func (ns NFTStateValue) HashBytes() []byte {
-	return ns.n.Bytes()
+	return ns.NFT.Bytes()
 }
 
 func StateNFTValue(st base.State) (nft.NFT, error) {
@@ -231,7 +231,7 @@ func StateNFTValue(st base.State) (nft.NFT, error) {
 		return nft.NFT{}, errors.Errorf("invalid nft value found, %T", v)
 	}
 
-	return ns.n, nil
+	return ns.NFT, nil
 }
 
 func IsStateNFTKey(key string) bool {
@@ -271,13 +271,13 @@ var (
 
 type NFTBoxStateValue struct {
 	hint.BaseHinter
-	box NFTBox
+	Box NFTBox
 }
 
 func NewNFTBoxStateValue(box NFTBox) NFTBoxStateValue {
 	return NFTBoxStateValue{
 		BaseHinter: hint.NewBaseHinter(NFTBoxStateValueHint),
-		box:        box,
+		Box:        box,
 	}
 }
 
@@ -292,7 +292,7 @@ func (nb NFTBoxStateValue) IsValid([]byte) error {
 		return e.Wrap(err)
 	}
 
-	if err := nb.box.IsValid(nil); err != nil {
+	if err := nb.Box.IsValid(nil); err != nil {
 		return e.Wrap(err)
 	}
 
@@ -300,7 +300,7 @@ func (nb NFTBoxStateValue) IsValid([]byte) error {
 }
 
 func (nb NFTBoxStateValue) HashBytes() []byte {
-	return nb.box.Bytes()
+	return nb.Box.Bytes()
 }
 
 func StateNFTBoxValue(st base.State) (NFTBox, error) {
@@ -314,7 +314,7 @@ func StateNFTBoxValue(st base.State) (NFTBox, error) {
 		return NFTBox{}, errors.Errorf("invalid nft box value found, %T", v)
 	}
 
-	return nb.box, nil
+	return nb.Box, nil
 }
 
 func IsStateNFTBoxKey(key string) bool {
@@ -354,13 +354,13 @@ var (
 
 type AgentBoxStateValue struct {
 	hint.BaseHinter
-	box AgentBox
+	Box AgentBox
 }
 
 func NewAgentBoxStateValue(box AgentBox) AgentBoxStateValue {
 	return AgentBoxStateValue{
 		BaseHinter: hint.NewBaseHinter(AgentBoxStateValueHint),
-		box:        box,
+		Box:        box,
 	}
 }
 
@@ -375,7 +375,7 @@ func (ab AgentBoxStateValue) IsValid([]byte) error {
 		return e.Wrap(err)
 	}
 
-	if err := ab.box.IsValid(nil); err != nil {
+	if err := ab.Box.IsValid(nil); err != nil {
 		return e.Wrap(err)
 	}
 
@@ -383,7 +383,7 @@ func (ab AgentBoxStateValue) IsValid([]byte) error {
 }
 
 func (ab AgentBoxStateValue) HashBytes() []byte {
-	return ab.box.Bytes()
+	return ab.Box.Bytes()
 }
 
 func StateAgentBoxValue(st base.State) (AgentBox, error) {
@@ -397,7 +397,7 @@ func StateAgentBoxValue(st base.State) (AgentBox, error) {
 		return AgentBox{}, errors.Errorf("invalid agent box value found, %T", v)
 	}
 
-	return ab.box, nil
+	return ab.Box, nil
 }
 
 func IsStateAgentBoxKey(key string) bool {

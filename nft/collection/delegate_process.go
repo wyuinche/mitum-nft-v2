@@ -212,7 +212,7 @@ func (opp *DelegateProcessor) Process(
 
 	boxes := map[string]*AgentBox{}
 	for _, item := range fact.Items() {
-		ak := StateKeyAgentBox(item.Agent(), item.Collection())
+		ak := StateKeyAgentBox(fact.Sender(), item.Collection())
 
 		var box AgentBox
 		switch st, found, err := getStateFunc(ak); {
@@ -242,7 +242,7 @@ func (opp *DelegateProcessor) Process(
 		ipc.h = op.Hash()
 		ipc.sender = fact.Sender()
 		ipc.item = item
-		ipc.box = boxes[StateKeyAgentBox(item.Agent(), item.Collection())]
+		ipc.box = boxes[StateKeyAgentBox(fact.Sender(), item.Collection())]
 
 		s, err := ipc.Process(ctx, op, getStateFunc)
 		if err != nil {

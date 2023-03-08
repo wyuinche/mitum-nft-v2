@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"strings"
 
+	extensioncurrency "github.com/ProtoconNet/mitum-currency-extension/currency"
 	"github.com/ProtoconNet/mitum-nft/nft"
 	"github.com/pkg/errors"
 	"github.com/spikeekips/mitum/base"
@@ -42,4 +43,37 @@ func (v *SignerFlag) String() string {
 
 func (v *SignerFlag) Encode(enc encoder.Encoder) (base.Address, error) {
 	return base.DecodeAddress(v.address, enc)
+}
+
+type NFTIDFlag struct {
+	collection extensioncurrency.ContractID
+	idx        uint64
+}
+
+func (v *NFTIDFlag) UnmarshalText(b []byte) error {
+	l := strings.SplitN(string(b), "-", 2)
+	if len(l) != 2 {
+		return fmt.Errorf("invalid nft id, %q", string(b))
+	}
+
+	s, id := l[0], l[1]
+
+	collection := extensioncurrency.ContractID(s)
+	if err := collection.IsValid(nil); err != nil {
+		return err
+	}
+	v.collection = collection
+
+	if i, err := strconv.ParseUint(id, 10, 64); err != nil {
+		return err
+	} else {
+		v.idx = i
+	}
+
+	return nil
+}
+
+func (v *NFTIDFlag) String() string {
+	s := fmt.Sprintf("%s,%d", v.collection, v.idx)
+	return s
 }

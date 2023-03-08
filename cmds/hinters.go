@@ -80,8 +80,8 @@ var hinters = []encoder.DecodeDetail{
 	{Hint: collection.MintHint, Instance: collection.Mint{}},
 	{Hint: collection.DelegateItemHint, Instance: collection.DelegateItem{}},
 	{Hint: collection.DelegateHint, Instance: collection.Delegate{}},
-	// {Hint: collection.ApproveItemHint, Instance: collection.ApproveItem{}},
-	// {Hint: collection.ApproveHint, Instance: collection.Approve{}},
+	{Hint: collection.ApproveItemHint, Instance: collection.ApproveItem{}},
+	{Hint: collection.ApproveHint, Instance: collection.Approve{}},
 }
 
 var supportedProposalOperationFactHinters = []encoder.DecodeDetail{
@@ -102,7 +102,7 @@ var supportedProposalOperationFactHinters = []encoder.DecodeDetail{
 	{Hint: collection.CollectionRegisterFactHint, Instance: collection.CollectionRegisterFact{}},
 	{Hint: collection.MintFactHint, Instance: collection.MintFact{}},
 	{Hint: collection.DelegateFactHint, Instance: collection.DelegateFact{}},
-	// {Hint: collection.ApproveFactHint, Instance: collection.ApproveFact{}},
+	{Hint: collection.ApproveFactHint, Instance: collection.ApproveFact{}},
 }
 
 func init() {
