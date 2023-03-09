@@ -230,6 +230,13 @@ func (opr *OperationProcessor) checkDuplication(op base.Operation) error {
 		}
 		did = fact.Sender().String()
 		didtype = DuplicationTypeSender
+	case CollectionPolicyUpdater:
+		fact, ok := t.Fact().(CollectionPolicyUpdaterFact)
+		if !ok {
+			return errors.Errorf("expected CollectionPolicyUpdaterFact, not %T", t.Fact())
+		}
+		did = fact.Sender().String()
+		didtype = DuplicationTypeSender
 	case Mint:
 		fact, ok := t.Fact().(MintFact)
 		if !ok {
@@ -329,6 +336,7 @@ func (opr *OperationProcessor) getNewProcessor(op base.Operation) (base.Operatio
 		extensioncurrency.CurrencyPolicyUpdater,
 		currency.SuffrageInflation,
 		CollectionRegister,
+		CollectionPolicyUpdater,
 		Mint,
 		Delegate,
 		Approve:

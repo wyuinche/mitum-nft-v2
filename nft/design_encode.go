@@ -29,7 +29,7 @@ func (de *Design) unmarshal(
 	}
 	de.parent = parent
 
-	creator, err := base.DecodeAddress(pr, enc)
+	creator, err := base.DecodeAddress(cr, enc)
 	if err != nil {
 		return e(err, "")
 	}
