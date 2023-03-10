@@ -79,6 +79,8 @@ var hinters = []encoder.DecodeDetail{
 	{Hint: collection.MintFormHint, Instance: collection.MintForm{}},
 	{Hint: collection.MintItemHint, Instance: collection.MintItem{}},
 	{Hint: collection.MintHint, Instance: collection.Mint{}},
+	{Hint: collection.NFTTransferItemHint, Instance: collection.NFTTransferItem{}},
+	{Hint: collection.NFTTransferHint, Instance: collection.NFTTransfer{}},
 	{Hint: collection.DelegateItemHint, Instance: collection.DelegateItem{}},
 	{Hint: collection.DelegateHint, Instance: collection.Delegate{}},
 	{Hint: collection.ApproveItemHint, Instance: collection.ApproveItem{}},
@@ -103,6 +105,7 @@ var supportedProposalOperationFactHinters = []encoder.DecodeDetail{
 	{Hint: collection.CollectionRegisterFactHint, Instance: collection.CollectionRegisterFact{}},
 	{Hint: collection.CollectionPolicyUpdaterFactHint, Instance: collection.CollectionPolicyUpdaterFact{}},
 	{Hint: collection.MintFactHint, Instance: collection.MintFact{}},
+	{Hint: collection.NFTTransferFactHint, Instance: collection.NFTTransferFact{}},
 	{Hint: collection.DelegateFactHint, Instance: collection.DelegateFact{}},
 	{Hint: collection.ApproveFactHint, Instance: collection.ApproveFact{}},
 }

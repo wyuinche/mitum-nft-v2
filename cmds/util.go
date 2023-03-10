@@ -173,6 +173,7 @@ func POperationProcessorsMap(ctx context.Context) (context.Context, error) {
 	opr.SetProcessor(collection.CollectionRegisterHint, collection.NewCollectionRegisterProcessor())
 	opr.SetProcessor(collection.CollectionPolicyUpdaterHint, collection.NewCollectionPolicyUpdaterProcessor())
 	opr.SetProcessor(collection.MintHint, collection.NewMintProcessor())
+	opr.SetProcessor(collection.NFTTransferHint, collection.NewNFTTransferProcessor())
 	opr.SetProcessor(collection.DelegateHint, collection.NewDelegateProcessor())
 	opr.SetProcessor(collection.ApproveHint, collection.NewApproveProcessor())
 
@@ -267,6 +268,15 @@ func POperationProcessorsMap(ctx context.Context) (context.Context, error) {
 	})
 
 	_ = set.Add(collection.MintHint, func(height base.Height) (base.OperationProcessor, error) {
+		return opr.New(
+			height,
+			db.State,
+			nil,
+			nil,
+		)
+	})
+
+	_ = set.Add(collection.NFTTransferHint, func(height base.Height) (base.OperationProcessor, error) {
 		return opr.New(
 			height,
 			db.State,
