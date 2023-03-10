@@ -16,6 +16,7 @@ type OperationCommand struct {
 	CollectionRegister      CollectionRegisterCommand         `cmd:"" name:"collection-register" help:"register new collection design"`
 	CollectionPolicyUpdater CollectionPolicyUpdaterCommand    `cmd:"" name:"collection-policy-updater" help:"update collection design"`
 	Mint                    MintCommand                       `cmd:"" name:"mint" help:"mint new nft to collection"`
+	NFTTransfer             NFTTransferCommand                `cmd:"" name:"nft-transfer" help:"transfer nfts to receiver"`
 	Delegate                DelegateCommand                   `cmd:"" name:"delegate" help:"delegate agent or cancel agent delegation"`
 	Approve                 ApproveCommand                    `cmd:"" name:"approve" help:"approve account for nft"`
 	SuffrageCandidate       cmds.SuffrageCandidateCommand     `cmd:"" name:"suffrage-candidate" help:"suffrage candidate operation"`
@@ -36,6 +37,7 @@ func NewOperationCommand() OperationCommand {
 		CollectionRegister:      NewCollectionRegisterCommand(),
 		CollectionPolicyUpdater: NewCollectionPolicyUpdaterCommand(),
 		Mint:                    NewMintCommand(),
+		NFTTransfer:             NewNFTTranfserCommand(),
 		Delegate:                NewDelegateCommand(),
 		Approve:                 NewApproveCommand(),
 		SuffrageCandidate:       cmds.NewSuffrageCandidateCommand(),

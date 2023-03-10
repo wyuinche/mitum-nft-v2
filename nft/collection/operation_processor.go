@@ -244,6 +244,13 @@ func (opr *OperationProcessor) checkDuplication(op base.Operation) error {
 		}
 		did = fact.Sender().String()
 		didtype = DuplicationTypeSender
+	case NFTTransfer:
+		fact, ok := t.Fact().(NFTTransferFact)
+		if !ok {
+			return errors.Errorf("expected NFTTransferFact, not %T", t.Fact())
+		}
+		did = fact.Sender().String()
+		didtype = DuplicationTypeSender
 	case Delegate:
 		fact, ok := t.Fact().(DelegateFact)
 		if !ok {
@@ -338,6 +345,7 @@ func (opr *OperationProcessor) getNewProcessor(op base.Operation) (base.Operatio
 		CollectionRegister,
 		CollectionPolicyUpdater,
 		Mint,
+		NFTTransfer,
 		Delegate,
 		Approve:
 		return nil, false, errors.Errorf("%T needs SetProcessor", t)
