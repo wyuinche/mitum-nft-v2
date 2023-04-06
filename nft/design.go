@@ -4,11 +4,11 @@ import (
 	"net/url"
 	"strings"
 
-	extensioncurrency "github.com/ProtoconNet/mitum-currency-extension/currency"
-	"github.com/spikeekips/mitum/base"
-	"github.com/spikeekips/mitum/util"
-	"github.com/spikeekips/mitum/util/hint"
-	"github.com/spikeekips/mitum/util/valuehash"
+	extensioncurrency "github.com/ProtoconNet/mitum-currency-extension/v2/currency"
+	"github.com/ProtoconNet/mitum2/base"
+	"github.com/ProtoconNet/mitum2/util"
+	"github.com/ProtoconNet/mitum2/util/hint"
+	"github.com/ProtoconNet/mitum2/util/valuehash"
 )
 
 var MaxPaymentParameter uint = 99

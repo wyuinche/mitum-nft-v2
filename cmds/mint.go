@@ -3,15 +3,15 @@ package cmds
 import (
 	"context"
 
-	extensioncurrency "github.com/ProtoconNet/mitum-currency-extension/currency"
+	extensioncurrency "github.com/ProtoconNet/mitum-currency-extension/v2/currency"
 	"github.com/ProtoconNet/mitum-nft/nft"
 	"github.com/ProtoconNet/mitum-nft/nft/collection"
 
 	"github.com/pkg/errors"
 
-	"github.com/spikeekips/mitum-currency/cmds"
-	"github.com/spikeekips/mitum/base"
-	"github.com/spikeekips/mitum/util"
+	"github.com/ProtoconNet/mitum-currency/v2/cmds"
+	"github.com/ProtoconNet/mitum2/base"
+	"github.com/ProtoconNet/mitum2/util"
 )
 
 type MintCommand struct {

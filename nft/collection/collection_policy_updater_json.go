@@ -3,11 +3,11 @@ package collection
 import (
 	"encoding/json"
 
-	extensioncurrency "github.com/ProtoconNet/mitum-currency-extension/currency"
-	"github.com/spikeekips/mitum-currency/currency"
-	"github.com/spikeekips/mitum/base"
-	"github.com/spikeekips/mitum/util"
-	jsonenc "github.com/spikeekips/mitum/util/encoder/json"
+	extensioncurrency "github.com/ProtoconNet/mitum-currency-extension/v2/currency"
+	"github.com/ProtoconNet/mitum-currency/v2/currency"
+	"github.com/ProtoconNet/mitum2/base"
+	"github.com/ProtoconNet/mitum2/util"
+	jsonenc "github.com/ProtoconNet/mitum2/util/encoder/json"
 )
 
 type CollectionPolicyUpdaterFactJSONMarshaler struct {

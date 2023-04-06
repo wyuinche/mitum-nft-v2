@@ -1,9 +1,9 @@
 package collection
 
 import (
+	"github.com/ProtoconNet/mitum-currency/v2/currency"
+	"github.com/ProtoconNet/mitum2/base"
 	"github.com/pkg/errors"
-	"github.com/spikeekips/mitum-currency/currency"
-	"github.com/spikeekips/mitum/base"
 )
 
 func checkThreshold(fs []base.Sign, keys currency.AccountKeys) error {
