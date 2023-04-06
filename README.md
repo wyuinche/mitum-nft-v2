@@ -1,6 +1,6 @@
-### mitum-nft-v2
+### mitum-nft v2
 
-*mitum-nft-v2* is a nft contract model based on the second version of mitum(aka mitum2).
+*mitum-nft v2* is a nft contract model based on the second version of mitum(aka [mitum2](https://github.com/ProtoconNet/mitum2)).
 
 #### Features,
 
@@ -15,9 +15,11 @@
 Before you build `mitum-nft`, make sure to run `docker run`.
 
 ```sh
-$ git clone https://github.com/ProtoconNet/mitum-nft-v2
+$ git clone https://github.com/ProtoconNet/mitum-nft
 
-$ cd mitum-nft-v2
+$ cd mitum-nft
+
+$ git checkout -t origin/v2
 
 $ go build -o ./mitum-nft
 ```
@@ -25,9 +27,13 @@ $ go build -o ./mitum-nft
 #### Run
 
 ```sh
-$ ./mitum-nft init <config file>
+$ ./mitum-nft init --design=<config file> <genesis file>
 
 $ ./mitum-nft run <config file>
 ```
 
 [standalong.yml](standalone.yml) is a sample of `config file`.
+
+[genesis-design.yml](genesis-design.yml) is a sample of `genesis design file`.
+
+[test-jsons](test-jsons) is a set of sample files for testing.
