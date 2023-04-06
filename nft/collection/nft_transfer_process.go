@@ -157,8 +157,8 @@ func NewNFTTransferProcessor() extensioncurrency.GetNewProcessor {
 	) (base.OperationProcessor, error) {
 		e := util.StringErrorFunc("failed to create new NFTTransferProcessor")
 
-		nopp := mintProcessorPool.Get()
-		opp, ok := nopp.(*MintProcessor)
+		nopp := nftTransferProcessorPool.Get()
+		opp, ok := nopp.(*NFTTransferProcessor)
 		if !ok {
 			return nil, e(nil, "expected NFTTransferProcessor, not %T", nopp)
 		}
