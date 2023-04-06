@@ -1,11 +1,11 @@
 package nft
 
 import (
-	extensioncurrency "github.com/ProtoconNet/mitum-currency-extension/currency"
-	"github.com/spikeekips/mitum/base"
-	"github.com/spikeekips/mitum/util"
-	"github.com/spikeekips/mitum/util/encoder"
-	"github.com/spikeekips/mitum/util/hint"
+	extensioncurrency "github.com/ProtoconNet/mitum-currency-extension/v2/currency"
+	"github.com/ProtoconNet/mitum2/base"
+	"github.com/ProtoconNet/mitum2/util"
+	"github.com/ProtoconNet/mitum2/util/encoder"
+	"github.com/ProtoconNet/mitum2/util/hint"
 )
 
 func (de *Design) unmarshal(

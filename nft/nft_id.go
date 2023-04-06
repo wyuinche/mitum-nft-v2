@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"strconv"
 
-	extensioncurrency "github.com/ProtoconNet/mitum-currency-extension/currency"
-	"github.com/spikeekips/mitum/util"
-	"github.com/spikeekips/mitum/util/hint"
+	extensioncurrency "github.com/ProtoconNet/mitum-currency-extension/v2/currency"
+	"github.com/ProtoconNet/mitum2/util"
+	"github.com/ProtoconNet/mitum2/util/hint"
 )
 
 var MaxNFTIndex uint64 = 10000

@@ -1,11 +1,11 @@
 package collection
 
 import (
-	extensioncurrency "github.com/ProtoconNet/mitum-currency-extension/currency"
+	extensioncurrency "github.com/ProtoconNet/mitum-currency-extension/v2/currency"
+	bsonenc "github.com/ProtoconNet/mitum-currency/v2/digest/util/bson"
 	"github.com/ProtoconNet/mitum-nft/nft"
-	bsonenc "github.com/spikeekips/mitum-currency/digest/util/bson"
-	"github.com/spikeekips/mitum/util"
-	"github.com/spikeekips/mitum/util/hint"
+	"github.com/ProtoconNet/mitum2/util"
+	"github.com/ProtoconNet/mitum2/util/hint"
 	"go.mongodb.org/mongo-driver/bson"
 )
 
