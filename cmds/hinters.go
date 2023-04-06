@@ -85,6 +85,8 @@ var hinters = []encoder.DecodeDetail{
 	{Hint: collection.DelegateHint, Instance: collection.Delegate{}},
 	{Hint: collection.ApproveItemHint, Instance: collection.ApproveItem{}},
 	{Hint: collection.ApproveHint, Instance: collection.Approve{}},
+	{Hint: collection.NFTSignItemHint, Instance: collection.NFTSignItem{}},
+	{Hint: collection.NFTSignHint, Instance: collection.NFTSign{}},
 }
 
 var supportedProposalOperationFactHinters = []encoder.DecodeDetail{
@@ -108,6 +110,7 @@ var supportedProposalOperationFactHinters = []encoder.DecodeDetail{
 	{Hint: collection.NFTTransferFactHint, Instance: collection.NFTTransferFact{}},
 	{Hint: collection.DelegateFactHint, Instance: collection.DelegateFact{}},
 	{Hint: collection.ApproveFactHint, Instance: collection.ApproveFact{}},
+	{Hint: collection.NFTSignFactHint, Instance: collection.NFTSignFact{}},
 }
 
 func init() {
