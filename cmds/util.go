@@ -176,6 +176,7 @@ func POperationProcessorsMap(ctx context.Context) (context.Context, error) {
 	opr.SetProcessor(collection.NFTTransferHint, collection.NewNFTTransferProcessor())
 	opr.SetProcessor(collection.DelegateHint, collection.NewDelegateProcessor())
 	opr.SetProcessor(collection.ApproveHint, collection.NewApproveProcessor())
+	opr.SetProcessor(collection.NFTSignHint, collection.NewNFTSignProcessor())
 
 	_ = set.Add(currency.CreateAccountsHint, func(height base.Height) (base.OperationProcessor, error) {
 		return opr.New(
@@ -295,6 +296,15 @@ func POperationProcessorsMap(ctx context.Context) (context.Context, error) {
 	})
 
 	_ = set.Add(collection.ApproveHint, func(height base.Height) (base.OperationProcessor, error) {
+		return opr.New(
+			height,
+			db.State,
+			nil,
+			nil,
+		)
+	})
+
+	_ = set.Add(collection.NFTSignHint, func(height base.Height) (base.OperationProcessor, error) {
 		return opr.New(
 			height,
 			db.State,

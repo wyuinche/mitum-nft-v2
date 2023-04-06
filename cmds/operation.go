@@ -19,6 +19,7 @@ type OperationCommand struct {
 	NFTTransfer             NFTTransferCommand                `cmd:"" name:"nft-transfer" help:"transfer nfts to receiver"`
 	Delegate                DelegateCommand                   `cmd:"" name:"delegate" help:"delegate agent or cancel agent delegation"`
 	Approve                 ApproveCommand                    `cmd:"" name:"approve" help:"approve account for nft"`
+	NFTSign                 NFTSignCommand                    `cmd:"" name:"nft-sign" help:"sign nft as creator | copyrighter"`
 	SuffrageCandidate       cmds.SuffrageCandidateCommand     `cmd:"" name:"suffrage-candidate" help:"suffrage candidate operation"`
 	SuffrageJoin            cmds.SuffrageJoinCommand          `cmd:"" name:"suffrage-join" help:"suffrage join operation"`
 	SuffrageDisjoin         cmds.SuffrageDisjoinCommand       `cmd:"" name:"suffrage-disjoin" help:"suffrage disjoin operation"` // revive:disable-line:line-length-limit
@@ -40,6 +41,7 @@ func NewOperationCommand() OperationCommand {
 		NFTTransfer:             NewNFTTranfserCommand(),
 		Delegate:                NewDelegateCommand(),
 		Approve:                 NewApproveCommand(),
+		NFTSign:                 NewNFTSignCommand(),
 		SuffrageCandidate:       cmds.NewSuffrageCandidateCommand(),
 		SuffrageJoin:            cmds.NewSuffrageJoinCommand(),
 		SuffrageDisjoin:         cmds.NewSuffrageDisjoinCommand(),
